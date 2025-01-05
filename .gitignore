@@ -1,20 +1,59 @@
-# Ignore database
-*.sqlite3
-
-# Ignore compiled Python files
+# Python bytecode files
 __pycache__/
-*.py[cod]
+*.pyc
+*.pyo
+*.pyd
+*.pdb
+*.swp
 
-# Ignore virtual environment
+# Django migration files
+*/migrations/*
+!*/migrations/__init__.py
+
+# SQLite database (if using SQLite)
+db.sqlite3
+
+# Django secret key
+*.env
+*.env.*
+
+# Media files (user-uploaded content)
+media/
+
+# Local development environment files
+*.local
+
+# PyCharm
+.idea/
+
+# VS Code
+.vscode/
+
+# Virtual environments
 venv/
 env/
+.env/
+.venv/
 
-# Ignore static files built during deployment
+# Coverage reports
+.coverage
+*.cover
+*.py,cover
 
-# Ignore secret files
-*.env
+# MySQL, PostgreSQL, or other database files
+*.sql
+*.db
 
-# Ignore editor and OS-specific files
-.vscode/
-.idea/
-*.DS_Store
+# Logs
+*.log
+
+# Operating system files
+.DS_Store
+Thumbs.db
+
+# Docker-related files (if using Docker)
+docker-compose.override.yml
+docker-compose.yml
+
+# pytest
+.cache
