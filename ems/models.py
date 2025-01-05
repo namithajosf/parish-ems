@@ -1,5 +1,13 @@
 from django.db import models
 
+class Role(models.Model):
+    role = models.CharField(max_length=255)
+    status = models.CharField(max_length=255)
+    created_time = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.role
+
 class Parish(models.Model):
     parish_name = models.CharField(max_length=255)
     parent_parish = models.CharField(max_length=255, null=True, blank=True)
@@ -32,22 +40,10 @@ class UserRegistration(models.Model):
     password = models.CharField(max_length=100)
     email = models.EmailField()
     contact_number = models.CharField(max_length=15)
-    ROLE_CHOICES = [
-        ('Public', 'Public'),
-        ('Priest', 'Priest'),
-        ('Secretary', 'Secretary'),
-        ('Admin', 'Admin'),
-    ]
-    role = models.CharField(max_length=10, choices=ROLE_CHOICES, default='Public')
-    STATUS_CHOICES = [
-        ('Pending', 'Pending'),
-        ('Approved', 'Approved'),
-        ('Completed', 'Completed'),
-        ('Cancelled', 'Cancelled'),
-    ]
-    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='Pending')
-    parish = models.CharField(max_length=50)
+    role = models.CharField(max_length=10)
+    status = models.CharField(max_length=10, choices=[('Active', 'Active'), ('Inactive', 'Inactive')], default='Active')
+    parish = models.CharField(max_length=100)
 
     def __str__(self):
-        return self.username
+        return self.username, self.parish
 

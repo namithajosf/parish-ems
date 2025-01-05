@@ -226,95 +226,82 @@
                         </div>
 
                         <div class="row">
-                            <div class="col-lg-6">
+                            <div class="col-12">
                                 <div class="card">
-                                    <div class="card-body p-4">
-                                        <form method="POST" action="{% url 'user_account' %}">  <!-- Django form submission -->
-                                            {% csrf_token %} <!-- Required for Django forms -->
-                                            
-                                            <!-- Username Field -->
-                                            <div class="mb-4">
-                                                <label for="username" class="form-label">Username</label>
-                                                <input type="text" class="form-control" id="username" name="username" placeholder="" required>
-                                            </div>
-                                            
-                                            <!-- Password Field -->
-                                            <div class="mb-4">
-                                                <label for="password" class="form-label">Password</label>
-                                                <div class="input-group">
-                                                    <input type="password" class="form-control" id="password" name="password" placeholder="" required>
-                                                    <span class="input-group-text px-6" id="basic-addon1">
-                                                        <i class="ti ti-eye fs-6"></i>
-                                                    </span>
+                                    <div class="card-body">
+                                        <h4 class="card-title mb-3">Account</h4>
+                                        <form>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-floating mb-3">
+                                                        <input type="text" class="form-control" id="tb-fname" placeholder="Enter username here" />
+                                                        <label for="tb-fname">Username</label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-floating mb-3">
+                                                        <input type="password" class="form-control" id="tb-pwd" placeholder="Password" />
+                                                        <label for="tb-pwd">Password</label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-floating mb-3">
+                                                        <input type="password" class="form-control" id="tb-cpwd" placeholder="Password" />
+                                                        <label for="tb-cpwd">Confirm Password</label>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-6">
+                                                    <div class="form-floating mb-3">
+                                                        <select class="form-control" id="tb-fname" name="parish" required>
+                                                            <option value="" disabled selected>Select Parish</option>
+                                                            {% for parish in parishes %}
+                                                                <option value="{{ parish.id }}">{{ parish.parish }}</option>
+                                                            {% endfor %}
+                                                        </select>
+                                                        <label for="tb-fname">Parish</label>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-6">
+                                                    <div class="form-floating mb-3">
+                                                        <select class="form-control" id="tb-fname" name="role" required>
+                                                            <option value="" disabled selected>Select Role</option>
+                                                            {% for role in roles %}
+                                                                <option value="{{ role.id }}">{{ role.role }}</option>
+                                                            {% endfor %}
+                                                        </select>
+                                                        <label for="tb-fname">Role</label>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-6">
+                                                    <div class="form-group mb-4">
+                                                        <label class="form-label">Status</label>
+                                                        <select name="status" class="form-select" aria-label="Default select example" required>
+                                                            <option value="Active" selected>Active</option>
+                                                            <option value="Inactive">Inactive</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="col-12">
+                                                    <div class="d-md-flex align-items-center">
+                                                        <div class="ms-auto mt-3 mt-md-0">
+                                                            <button type="submit" class="btn btn-primary hstack gap-6">
+                                                                <i class="ti ti-send fs-4"></i>
+                                                                Save
+                                                            </button>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
-
-                                            <!-- Confirm Password Field -->
-                                            <div class="mb-4">
-                                                <label for="password" class="form-label">Password</label>
-                                                <div class="input-group">
-                                                    <input type="password" class="form-control" id="password" name="password" placeholder="" required>
-                                                    <span class="input-group-text px-6" id="basic-addon1">
-                                                        <i class="ti ti-eye fs-6"></i>
-                                                    </span>
-                                                </div>
-                                            </div>
-
-                                            
-                                            
-                                            <!-- Email Field -->
-                                            <div class="mb-4">
-                                                <label for="email" class="form-label">Email</label>
-                                                <input type="email" class="form-control" id="email" name="email" placeholder="e.g., user@example.com" required>
-                                            </div>
-                                            
-                                            <!-- Contact Number Field -->
-                                            <div class="mb-4">
-                                                <label for="contact_number" class="form-label">Contact Number</label>
-                                                <input type="text" class="form-control" id="contact_number" name="contact_number" placeholder="e.g., 9876543210" required>
-                                            </div>
-                                            
-                                            <!-- Role Field -->
-                                            <div class="mb-4">
-                                                <label for="role" class="form-label">Role</label>
-                                                <select class="form-select" id="role" name="role" aria-label="Select role" required>
-                                                    <option value="Public" selected>Public</option>
-                                                    <option value="Priest">Priest</option>
-                                                    <option value="Secretary">Secretary</option>
-                                                    <option value="Admin">Admin</option>
-                                                </select>
-                                            </div>
-                                            
-                                            <!-- Status Field -->
-                                            <div class="mb-4">
-                                                <label for="status" class="form-label">Status</label>
-                                                <select class="form-select" id="status" name="status" aria-label="Select status" required>
-                                                    <option value="Pending" selected>Pending</option>
-                                                    <option value="Approved">Approved</option>
-                                                    <option value="Completed">Completed</option>
-                                                    <option value="Cancelled">Cancelled</option>
-                                                </select>
-                                            </div>
-                                            
-                                            <!-- Parish Field -->
-                                            <div class="mb-4">
-                                                <label for="parish" class="form-label">Parish</label>
-                                                <select class="form-select" id="parish" name="parish" aria-label="Select parish" required>
-                                                    <option value="Parish 1" selected>Parish 1</option>
-                                                    <option value="Parish 2">Parish 2</option>
-                                                    <option value="Parish 3">Parish 3</option>
-                                                    <option value="Parish 4">Parish 4</option>
-                                                </select>
-                                            </div>
-                                            
-                                            <!-- Submit Button -->
-                                            <button type="submit" class="btn btn-primary">Send</button>
                                         </form>
                                     </div>
                                 </div>
-                            </div>
+                              </div>
                         </div>
-                        
+                    </div>
                     <!------------------------------------------------------------------------------------------------------------------------------------------------>
 
                     <button class="btn btn-danger p-3 rounded-circle d-flex align-items-center justify-content-center customizer-btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
