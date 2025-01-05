@@ -1,0 +1,20 @@
+# Ignore database
+*.sqlite3
+
+# Ignore compiled Python files
+__pycache__/
+*.py[cod]
+
+# Ignore virtual environment
+venv/
+env/
+
+# Ignore static files built during deployment
+
+# Ignore secret files
+*.env
+
+# Ignore editor and OS-specific files
+.vscode/
+.idea/
+*.DS_Store
