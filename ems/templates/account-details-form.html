@@ -49,21 +49,21 @@
                                     <!-- Home -->
                                     <!-- ---------------------------------- -->
                                     <li class="sidebar-item">
-                                        <a href="{% url 'index' %}" aria-expanded="false">
-                                            <iconify-icon icon="solar:screencast-2-line-duotone"></iconify-icon>
-                                            <span class="hide-menu">Dashboard</span>
-                                        </a>
+                                        <a class="sidebar-link" href="{% url 'index' %}">
+                                            <iconify-icon icon="mdi:view-dashboard-outline"></iconify-icon>Dashboard
+                                        </a>                                        
                                     </li>
                                     <li class="sidebar-item">
                                         <a class="sidebar-link" href="{% url 'app_calendar' %}">
-                                            <iconify-icon icon="solar:calendar-mark-line-duotone"></iconify-icon>Calendar
+                                            <iconify-icon icon="mdi:calendar-month-outline"></iconify-icon>Calendar
                                         </a>                                        
                                     </li>
                                     <li class="sidebar-item">
                                         <a class="sidebar-link" href="{% url 'app_kanban' %}">
-                                            <iconify-icon icon="solar:airbuds-case-minimalistic-line-duotone"></iconify-icon>Events
+                                            <iconify-icon icon="mdi:calendar-star"></iconify-icon>Events
                                         </a>
                                     </li>
+                                    
                                 </ul>
                             </nav>
                         </div>
