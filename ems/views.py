@@ -1,7 +1,9 @@
-from django.shortcuts import render, redirect
-from .models import Parish, UserRegistration, Role
+from django.shortcuts import render, redirect, get_object_or_404
+from .models import Parish, UserRegistration, Role, EventType, Event
 from .forms import EventTypeForm
 from django.contrib import messages
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
 
 
 def index(request):
@@ -11,7 +13,7 @@ def app_calendar(request):
     return render(request, 'app-calendar.html')
 
 def app_kanban(request):
-    return render(request, 'app_kanban.html')
+    return render(request, 'app-kanban.html')
 
 def add_parish_details(request):
     if request.method == 'POST':
@@ -39,6 +41,9 @@ def add_parish_details(request):
         return redirect('add_parish_details')
     return render(request, 'parish-details-form.html')
 
+def view_parish_details(request):
+    parishes = Parish.objects.all()
+    return render(request, "view-parish-details.html", {"parishes": parishes})
 
 def user_account(request):
     roles = Role.objects.all()

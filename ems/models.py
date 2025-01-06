@@ -45,5 +45,4 @@ class UserRegistration(models.Model):
     parish = models.CharField(max_length=100)
 
     def __str__(self):
-        return self.username, self.parish
-
+        return f"{self.username} {self.parish}"
