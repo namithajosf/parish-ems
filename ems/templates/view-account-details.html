@@ -13,7 +13,7 @@
         <!-- Core CSS -->
         <link rel="stylesheet" href="{% static 'dist/assets/css/styles.css' %}" />
         
-        <title>Parish Details</title>
+        <title>Account Details</title>
     </head>
     <body>
         <!-- Preloader -->
@@ -208,7 +208,7 @@
                                     <div class="col-12">
                                         <div class="d-sm-flex align-items-center justify-space-between">
 
-                                            <h4 class="mb-4 mb-sm-0 card-title">Parish Details</h4>
+                                            <h4 class="mb-4 mb-sm-0 card-title">Account Details</h4>
                                             <nav aria-label="breadcrumb" class="ms-auto">
                                                 <ol class="breadcrumb">
                                                     <li class="breadcrumb-item d-flex align-items-center">
@@ -218,7 +218,7 @@
                                                     </li>
                                                     
                                                     <li class="breadcrumb-item" aria-current="page">
-                                                        <span class="badge fw-medium fs-2 bg-primary-subtle text-primary">Parish</span>
+                                                        <span class="badge fw-medium fs-2 bg-primary-subtle text-primary">Account</span>
                                                     </li>
 
                                                 </ol>
@@ -227,10 +227,10 @@
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <div class="card w-100 position-relative overflow-hidden">
                                 <div class="px-4 py-3 border-bottom">
-                                    <h4 class="card-title mb-0">Parish Details</h4>
+                                    <h4 class="card-title mb-0">User Details</h4>
                                 </div>
                                 <div class="card-body p-4">
                                     <div class="table-responsive mb-4 border rounded-1">
@@ -238,19 +238,7 @@
                                             <thead class="table-primary">
                                                 <tr>
                                                     <th>
-                                                        <h6 class="fs-4 fw-semibold mb-0">Parish Name</h6>
-                                                    </th>
-                                                    <th>
-                                                        <h6 class="fs-4 fw-semibold mb-0">Parent Parish</h6>
-                                                    </th>
-                                                    <th>
-                                                        <h6 class="fs-4 fw-semibold mb-0">Secretary Name</h6>
-                                                    </th>
-                                                    <th>
-                                                        <h6 class="fs-4 fw-semibold mb-0">Place of Parish</h6>
-                                                    </th>
-                                                    <th>
-                                                        <h6 class="fs-4 fw-semibold mb-0">Address</h6>
+                                                        <h6 class="fs-4 fw-semibold mb-0">Username</h6>
                                                     </th>
                                                     <th>
                                                         <h6 class="fs-4 fw-semibold mb-0">Email</h6>
@@ -259,51 +247,47 @@
                                                         <h6 class="fs-4 fw-semibold mb-0">Contact Number</h6>
                                                     </th>
                                                     <th>
+                                                        <h6 class="fs-4 fw-semibold mb-0">Parish</h6>
+                                                    </th>
+                                                    <th>
+                                                        <h6 class="fs-4 fw-semibold mb-0">Role</h6>
+                                                    </th>
+                                                    <th>
                                                         <h6 class="fs-4 fw-semibold mb-0">Status</h6>
                                                     </th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                {% for parish in parishes %}
+                                                {% for user in users %}
                                                     <tr>
                                                         <td>
-                                                            <h6 class="fs-4 fw-semibold mb-0">{{ parish.parish_name }}</h6>
-                                                        </td>
-                                                        <td>
-                                                            <p class="mb-0 fw-normal fs-4" style="max-width: 100px; word-wrap: break-word; white-space: normal;">
-                                                                {{ parish.parent_parish }}
-                                                            </p>
-                                                        </td>
-                                                        <td>
-                                                            <p class="mb-0 fw-normal fs-4" style="max-width: 100px; word-wrap: break-word; white-space: normal;">
-                                                                {{ parish.secretary_name }}
-                                                            </p>
-                                                        </td>
-                                                        <td>
-                                                            <p class="mb-0 fw-normal fs-4" style="max-width: 100px; word-wrap: break-word; white-space: normal;">
-                                                                {{ parish.place_of_parish }}
-                                                            </p>
-                                                        </td>
-                                                        <td>
-                                                            <p class="mb-0 fw-normal fs-4" style="max-width: 100px; word-wrap: break-word; white-space: normal;">
-                                                                {{ parish.address }}
-                                                            </p>                                                            
+                                                            <h6 class="fs-4 fw-semibold mb-0">{{ user.username }}</h6>
                                                         </td>
                                                         <td>
                                                             <p class="mb-0 fw-normal fs-4">
-                                                                {{ parish.email }}
+                                                                {{ user.email }}
                                                             </p>
                                                         </td>
                                                         <td>
                                                             <p class="mb-0 fw-normal fs-4" style="max-width: 100px; word-wrap: break-word; white-space: normal;">
-                                                                {{ parish.contact_number }}
+                                                                {{ user.contact_number }}
                                                             </p>
                                                         </td>
                                                         <td>
-                                                            {% if parish.status == 'Active' %}
-                                                                <span class="badge bg-success-subtle text-success"> {{ parish.status }}</span>
-                                                            {% elif parish.status == 'Inactive' %}
-                                                                <span class="badge bg-danger-subtle text-danger"> {{ parish.status }}</span>
+                                                            <p class="mb-0 fw-normal fs-4" style="max-width: 100px; word-wrap: break-word; white-space: normal;">
+                                                                {{ user.parish }}
+                                                            </p>
+                                                        </td>
+                                                        <td>
+                                                            <p class="mb-0 fw-normal fs-4" style="max-width: 100px; word-wrap: break-word; white-space: normal;">
+                                                                {{ user.role }}
+                                                            </p>
+                                                        </td>
+                                                        <td>
+                                                            {% if user.status == 'Active' %}
+                                                                <span class="badge bg-success-subtle text-success"> {{ user.status }}</span>
+                                                            {% elif user.status == 'Inactive' %}
+                                                                <span class="badge bg-danger-subtle text-danger"> {{ user.status }}</span>
                                                             {% endif %}
                                                         </td>
                                                     </tr>
@@ -313,7 +297,6 @@
                                         </div>
                                 </div>
                             </div>
-                            
                             <button class="btn btn-danger p-3 rounded-circle d-flex align-items-center justify-content-center customizer-btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
                                 <i class="icon ti ti-settings fs-7"></i>
                             </button>
