@@ -1,0 +1,201 @@
+<form id="event-form" method="POST" action="{% url 'save_event' %}">
+    <div class="modal-body">
+        <div class="row">
+            <!-- Event Name -->
+            <div class="col-md-12">
+                <div class="mb-3">
+                    <label class="form-label">Event Name</label>
+                    <input id="event-name" name="event_name" type="text" class="form-control" placeholder="Enter Event Name" required />
+                </div>
+            </div>
+
+            <!-- Event Type (Radio Buttons) -->
+            <div class="col-md-12">
+                <div class="mb-3">
+                    <label class="form-label">Event Type</label>
+                    <div id="event-types">
+                        {% for event_type in event_types %}
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="event_type_id" id="event-type-{{ event_type.id }}" value="{{ event_type.id }}" required />
+                            <label class="form-check-label" for="event-type-{{ event_type.id }}">{{ event_type.name }}</label>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Event Date -->
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label class="form-label">Event Date</label>
+                    <input id="event-date" name="event_date" type="date" class="form-control" required />
+                </div>
+            </div>
+
+            <!-- Event Time -->
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label class="form-label">Event Time</label>
+                    <input id="event-time" name="event_time" type="time" class="form-control" required />
+                </div>
+            </div>
+
+            <!-- Parish (Dropdown) -->
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label class="form-label">Parish</label>
+                    <select id="parish-id" name="parish_id" class="form-control" required>
+                        <option value="" disabled selected>Select Parish</option>
+                        {% for parish in parishes %}
+                        <option value="{{ parish.id }}">{{ parish.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+            <!-- Priest (Dropdown) -->
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label class="form-label">Priest</label>
+                    <select id="priest-id" name="priest_id" class="form-control">
+                        <option value="" disabled selected>Select Priest</option>
+                        {% for priest in priests %}
+                        <option value="{{ priest.id }}">{{ priest.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+            <!-- Status -->
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label class="form-label">Status</label>
+                    <select id="status" name="status" class="form-select" required>
+                        <option value="Active" selected>Active</option>
+                        <option value="Inactive">Inactive</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Remarks -->
+            <div class="col-md-12">
+                <div class="mb-3">
+                    <label class="form-label">Remarks</label>
+                    <textarea id="remarks" name="remarks" class="form-control" rows="3" placeholder="Enter any remarks"></textarea>
+                </div>
+            </div>
+
+            <!-- Event Description -->
+            <div class="col-md-12">
+                <div class="mb-3">
+                    <label class="form-label">Event Description</label>
+                    <textarea id="event-description" name="event_description" class="form-control" rows="3" placeholder="Enter Event Description"></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-footer">
+        <button type="button" class="btn bg-danger-subtle text-danger" data-bs-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-success">Save Event</button>
+    </div>
+</form>
+
+
+<!-- views.py -->
+# Display the Events Page with Modal
+def event_page(request):
+    event_types = EventType.objects.all()
+    parishes = Parish.objects.all()
+    priests = UserRegistration.objects.all()
+
+    context = {
+        'event_types': event_types,
+        'parishes': parishes,
+        'priests': priests,
+        'events': Event.objects.all(),
+    }
+    return render(request, 'events.html', context)
+
+
+# Save or Update Event
+@csrf_exempt
+def save_event(request):
+    if request.method == 'POST':
+        data = request.POST
+
+        event_id = data.get('event_id')
+        event_name = data.get('event_name')
+        event_type_id = data.get('event_type_id')
+        event_date = data.get('event_date')
+        event_time = data.get('event_time')
+        event_description = data.get('event_description', '')
+        parish_id = data.get('parish_id')
+        created_by_id = request.user.id  # Assumes user is logged in
+        status = data.get('status')
+        priest_id = data.get('priest_id')
+        remarks = data.get('remarks', '')
+
+        # Update existing event or create a new one
+        if event_id:
+            event = get_object_or_404(Event, id=event_id)
+            event.event_name = event_name
+            event.event_type_id = event_type_id
+            event.event_date = event_date
+            event.event_time = event_time
+            event.event_description = event_description
+            event.parish_id = parish_id
+            event.status = status
+            event.priest_id = priest_id
+            event.remarks = remarks
+        else:
+            event = Event(
+                event_name=event_name,
+                event_type_id=event_type_id,
+                event_date=event_date,
+                event_time=event_time,
+                event_description=event_description,
+                parish_id=parish_id,
+                created_by_id=created_by_id,
+                status=status,
+                priest_id=priest_id,
+                remarks=remarks,
+            )
+
+        event.save()
+        return JsonResponse({'success': True, 'message': 'Event saved successfully.'})
+    return JsonResponse({'success': False, 'message': 'Invalid request.'})
+
+
+@csrf_exempt
+def delete_event(request, event_id):
+    event = get_object_or_404(Event, id=event_id)
+    event.delete()
+    return JsonResponse({'success': True, 'message': 'Event deleted successfully.'})
+
+
+<!-- model.py -->
+class Event(models.Model):
+STATUS_CHOICES = [
+    ('Active', 'Active'),
+    ('Inactive', 'Inactive'),
+]
+
+event_name = models.CharField(max_length=255)
+event_type = models.ForeignKey(EventType, on_delete=models.CASCADE)
+event_date = models.DateField()
+event_time = models.TimeField()
+event_description = models.TextField(null=True, blank=True)
+parish = models.ForeignKey(Parish, on_delete=models.CASCADE)
+created_by = models.ForeignKey(UserRegistration, on_delete=models.CASCADE, related_name='created_events')
+status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='Active')
+priest = models.ForeignKey(UserRegistration, on_delete=models.SET_NULL, null=True, blank=True, related_name='assigned_events')
+remarks = models.TextField(null=True, blank=True)
+
+def __str__(self):
+    return self.event_name
+
+<!-- urls.py -->
+path('events/', event_page, name='event_page'),
+path('save-event/', save_event, name='save_event'),
+path('delete-event/<int:event_id>/', delete_event, name='delete_event'),

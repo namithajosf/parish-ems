@@ -228,19 +228,21 @@
                                 </div>
                             </div>
                             {% if messages %}
-                                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                <div class="alert alert-dismissible fade show" role="alert">
                                     {% for message in messages %}
-                                        {{ message }}
+                                        <div class="{% if message.tags == 'success' %}alert-success{% elif message.tags == 'error' %}alert-danger{% endif %}">
+                                            {{ message }}
+                                        </div>
                                     {% endfor %}
                                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                                 </div>
                             {% endif %}
+                            
                             <div class="row">
                                 <div class="col-12">
                                     <div class="card">
                                         <div class="card-body">
                                             <h4 class="card-title mb-3">Add Parish Details</h4>
-                                            <!-- Updated Form -->
                                             <form method="post" action="{% url 'add_parish_details' %}">
                                                 {% csrf_token %}
                                                 <div class="row">
