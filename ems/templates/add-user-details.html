@@ -1,0 +1,151 @@
+{% extends 'index.html' %}
+{% block content %}
+<title>{% block title %}Add Users{% endblock %}</title>
+
+<div class="container-fluid">
+    <div class="card card-body py-3">
+        <div class="row align-items-center">
+            <div class="col-12">
+                <div class="d-sm-flex align-items-center justify-space-between">
+                    <h4 class="mb-4 mb-sm-0 card-title">Users</h4>
+                    <nav aria-label="breadcrumb" class="ms-auto">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item d-flex align-items-center">
+                                <a class="text-muted text-decoration-none d-flex" href="{% url 'index' %}">
+                                    <iconify-icon icon="solar:home-2-line-duotone" class="fs-6"></iconify-icon>
+                                </a>
+                            </li>
+                            <li class="breadcrumb-item" aria-current="page">
+                                <span class="badge fw-medium fs-2 bg-primary-subtle text-primary">User</span>
+                            </li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    {% if messages %}
+        <div class="alert alert-dismissible fade show" role="alert">
+            {% for message in messages %}
+                <div class="{% if message.tags == 'success' %}alert-success{% elif message.tags == 'error' %}alert-danger{% endif %}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endif %}
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title mb-3">User</h4>
+                    <form method="post" action="{% url 'add_user_details' %}">
+                        {% csrf_token %}
+
+                        <div class="row">
+                            <!-- Username -->
+                            <div class="col-md-6">
+                                <div class="form-group mb-4">
+                                    <label for="username" class="form-label">Username</label>
+                                    <input type="text" class="form-control" id="username" name="username" required>
+                                </div>
+                            </div>
+                            
+                            <!-- Email -->
+                            <div class="col-md-6">
+                                <div class="form-group mb-4">
+                                    <label for="email" class="form-label">Email</label>
+                                    <input type="text" class="form-control" id="email" name="email" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <!-- Password -->
+                            <div class="col-md-6">
+                                <div class="form-group mb-4">
+                                    <label for="password" class="form-label">Password</label>
+                                    <input type="password" class="form-control" id="password" name="password" required>
+                                </div>
+                            </div>
+                            
+                            <!-- Confirm Password -->
+                            <div class="col-md-6">
+                                <div class="form-group mb-4">
+                                    <label for="confirm_password" class="form-label">Confirm Password</label>
+                                    <input type="password" class="form-control" id="confirm_password" name="confirm_password" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <!-- Contact Number -->
+                            <div class="col-md-6">
+                                <div class="form-group mb-4">
+                                    <label for="contact_number" class="form-label">Contact Number</label>
+                                    <input type="text" class="form-control" id="contact_number" name="contact_number" required>
+                                </div>
+                            </div>
+                            
+                            <!-- Parish Select -->
+                            <div class="col-md-6">
+                                <div class="form-group mb-4">
+                                    <label class="form-label" for="parish_select">Parish</label>
+                                    <select id="parish_select" name="parish" class="form-select" aria-label="Default select example" required>
+                                        <option value="" disabled selected>Select Parish</option>
+                                        {% for parish in parishes %}
+                                            <option value="{{ parish.id }}">{{ parish.parish_name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <!-- Role Select -->
+                            <div class="col-md-6">
+                                <div class="form-group mb-4">
+                                    <label class="form-label" for="status_select">Role</label>
+                                    <select id="role_select" name="role" class="form-select" aria-label="Default select example" required>
+                                        <option value="" disabled selected>Select Role</option>
+                                        {% for role in roles %}
+                                            <option value="{{ role.id }}">{{ role.role }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <!-- Status Select -->
+                            <div class="col-md-6">
+                                <div class="form-group mb-4">
+                                    <label class="form-label" for="status_select">Status</label>
+                                    <select id="status_select" name="status" class="form-select" aria-label="Default select example" required>
+                                        <option value="Active" selected>Active</option>
+                                        <option value="Inactive">Inactive</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <div class="col-12">
+                            <div class="d-md-flex align-items-center">
+                                <div class="ms-auto mt-3 mt-md-0">
+                                    <button type="submit" class="btn btn-primary hstack gap-6">
+                                        <i class="ti ti-file-upload"></i>
+                                        Save
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+                    

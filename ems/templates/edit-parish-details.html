@@ -1,0 +1,132 @@
+{% extends 'index.html' %}
+{% block content %}
+
+<title>{% block title %}Parish Details{% endblock %}</title>
+
+<div class="container-fluid">
+    <div class="card card-body py-3">
+        <div class="row align-items-center">
+            <div class="col-12">
+                <div class="d-sm-flex align-items-center justify-space-between">
+                    <h4 class="mb-4 mb-sm-0 card-title">Parishes</h4>
+                    <nav aria-label="breadcrumb" class="ms-auto">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item d-flex align-items-center">
+                                <a class="text-muted text-decoration-none d-flex" href="{% url 'index' %}">
+                                    <iconify-icon icon="solar:home-2-line-duotone" class="fs-6"></iconify-icon>
+                                </a>
+                            </li>
+                            <li class="breadcrumb-item" aria-current="page">
+                                <span class="badge fw-medium fs-2 bg-primary-subtle text-primary">Parish</span>
+                            </li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    {% if messages %}
+        <div class="alert alert-dismissible fade show" role="alert">
+            {% for message in messages %}
+                <div class="{% if message.tags == 'success' %}alert-success{% elif message.tags == 'error' %}alert-danger{% endif %}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endif %}
+    
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+
+                    <form method="post" action="{% url 'edit_parish_details' pk=parish.pk %}">
+                        {% csrf_token %}
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group mb-4">
+                                    <label for="parish_name" class="form-label">Parish Name</label>
+                                    <input type="text" class="form-control" id="parish_name" name="parish_name" value="{{ parish.parish_name }}" required>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group mb-4">
+                                    <label for="parent_parish" class="form-label">Parent Parish</label>
+                                    <input type="text" class="form-control" id="parent_parish" name="parent_parish" value="{{ parish.parent_parish }}" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group mb-4">
+                                    <label for="secretary_name" class="form-label">Secretary Name</label>
+                                    <input type="text" class="form-control" id="secretary_name" name="secretary_name" value="{{ parish.secretary_name }}" required>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group mb-4">
+                                    <label for="place_of_parish" class="form-label">Place of Parish</label>
+                                    <input type="text" class="form-control" id="place_of_parish" name="place_of_parish" value="{{ parish.place_of_parish }}" required>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group mb-4">
+                                    <label for="address" class="form-label">Address</label>
+                                    <input type="text" class="form-control" id="address" name="address" value="{{ parish.address }}" required>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <div class="form-group mb-4">
+                                    <label for="email" class="form-label">Email</label>
+                                    <input type="text" class="form-control" id="email" name="email" value="{{ parish.email }}" required>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group mb-4">
+                                    <label for="contact_number" class="form-label">Phone Number</label>
+                                    <input type="text" class="form-control" id="contact_number" name="contact_number" value="{{ parish.contact_number }}" required>
+                                </div>
+                            
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <div class="form-group mb-4">
+                                    <label class="form-label" for="status_select">Status</label>
+                                    <select id="status_select" name="status" class="form-select" aria-label="Default select example" required>
+                                        <option value="Active" selected>Active</option>
+                                        <option value="Inactive">Inactive</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-4">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="ti ti-file-upload"></i>
+                                Save
+                            </button>
+                            <a href="{% url 'view_parish_details' parish.id %}" class="btn bg-danger-subtle text-danger ms-6">
+                                Cancel
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+                    

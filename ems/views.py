@@ -1,12 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Parish, UserRegistration, Role, EventType
-from .forms import EventTypeForm
 from django.contrib import messages
-from django.utils import timezone
 from django.contrib.auth.hashers import make_password
-from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
-
+from .models import Parish, Role, UserRegistration, EventType, Event
+from .forms import RoleForm, ParishForm, UserRegistrationForm, EventTypeForm, EventForm
 
 def index(request):
     return render(request, 'index.html')
@@ -17,112 +13,149 @@ def app_calendar(request):
 def app_kanban(request):
     return render(request, 'app-kanban.html')
 
+# Role Management
 def add_role_details(request):
     if request.method == 'POST':
-        role=request.POST.get('role')
-        status = request.POST.get('status')
+        form = RoleForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Role details saved successfully.")
+            return redirect('add_role_details')
+    else:
+        form = RoleForm()
+    return render(request, 'add-role-details.html', {'form': form})
 
-        Role.objects.create(
-            role=role,
-            status=status,
-            created_time = timezone.now()
-        )
-    
-        messages.success(request, "Role saved successfully.")
-    return render(request, 'add-role-details.html')
-
-def view_role_details(request):
+def list_roles(request):
     roles = Role.objects.all()
-    return render(request, "view-role-details.html", {"roles": roles})
+    return render(request, "list-roles.html", {"roles": roles})
 
+def view_role_details(request, role_id):
+    role = get_object_or_404(Role, id=role_id)
+    return render(request, 'view-role-details.html', {'role': role})
 
+def edit_role_details(request, pk):
+    role = get_object_or_404(Role, pk=pk)
+
+    if request.method == 'POST':
+        form = RoleForm(request.POST, instance=role)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Role details updated successfully.")
+            return redirect('edit_role_details', pk=role.pk)
+        
+    else:
+        form = RoleForm(instance=role)
+
+    return render(request, 'edit-role-details.html', {'form': form, 'role': role})
+
+# Parish Management
 def add_parish_details(request):
     if request.method == 'POST':
-        parish_name = request.POST.get('parish_name')
-        parent_parish = request.POST.get('parent_parish')
-        secretary_name = request.POST.get('secretary_name')
-        place_of_parish = request.POST.get('place_of_parish')
-        address = request.POST.get('address')
-        email = request.POST.get('email')
-        contact_number = request.POST.get('contact_number')
-        status = request.POST.get('status')
+        form = ParishForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Parish details saved successfully.")
+            return redirect('add_parish_details')
+    else:
+        form = ParishForm()
+    return render(request, 'add-parish-details.html', {'form': form})
 
-        Parish.objects.create(
-            parish_name=parish_name,
-            parent_parish=parent_parish,
-            secretary_name=secretary_name,
-            place_of_parish=place_of_parish,
-            address=address,
-            email=email,
-            contact_number=contact_number,
-            status=status,
-        )
-
-        messages.success(request, "Parish details saved successfully.")
-        return redirect('add_parish_details')
-    return render(request, 'parish-details-form.html')
-
-def view_parish_details(request):
+def list_parishes(request):
     parishes = Parish.objects.all()
-    return render(request, "view-parish-details.html", {"parishes": parishes})
+    return render(request, "list-parishes.html", {"parishes": parishes})
 
-def user_account(request):
-    roles = Role.objects.all()
-    parishes = Parish.objects.all()
+def view_parish_details(request, parish_id):
+    parish = get_object_or_404(Parish, id=parish_id)
+    return render(request, 'view-parish-details.html', {'parish': parish})
+
+def edit_parish_details(request, pk):
+    parish = get_object_or_404(Parish, pk=pk)
 
     if request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        confirm_password = request.POST.get('confirm_password')
-        parish_id = request.POST.get('parish')
-        role_id = request.POST.get('role')
-        status = request.POST.get('status')
-        email = request.POST.get('email')
-        contact_number = request.POST.get('contact_number')
-
-        if password != confirm_password:
-            messages.error(request, "Passwords do not match!")
-            return redirect('user_account')
-
-        try:
-            parish = Parish.objects.get(id=parish_id)
-            role = Role.objects.get(id=role_id)
-
-            UserRegistration.objects.create(
-                username=username,
-                password=make_password(password),
-                email=email,
-                contact_number=contact_number,
-                parish=parish.parish_name,
-                role=role.role,
-                status=status
-            )
-
-            messages.success(request, "Account saved successfully!")
-            return redirect('user_account')
+        form = ParishForm(request.POST, instance=parish)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Parish details updated successfully.")
+            return redirect('edit_parish_details', pk=parish.pk)
         
-        except Parish.DoesNotExist:
-            messages.error(request, "Parish not found!")
-        except Role.DoesNotExist:
-            messages.error(request, "Role not found!")
-        except Exception as e:
-            messages.error(request, f"Failed to save user account: {str(e)}")
-            print(f"Error saving user account: {str(e)}")
-            return redirect('user_account')
+    else:
+        form = ParishForm(instance=parish)
 
-    return render(request, 'account-details-form.html', {'roles': roles, 'parishes': parishes})
+    return render(request, 'edit-parish-details.html', {'form': form, 'parish': parish})
 
-def view_account_details(request):
+# User Account Management
+def add_user_details(request):
+    if request.method == 'POST':
+        form = UserRegistrationForm(request.POST)
+        if form.is_valid():
+            password = form.cleaned_data['password']
+            confirm_password = form.cleaned_data['confirm_password']
+            if password != confirm_password:
+                messages.error(request, "Passwords do not match!")
+            else:
+                user = form.save(commit=False)
+                user.password = make_password(password)
+                user.save()
+                messages.success(request, "Account saved successfully!")
+                return redirect('add_user_details')
+    else:
+        form = UserRegistrationForm()
+
+    parishes = Parish.objects.all()
+    roles = Role.objects.all()
+
+    return render(
+        request, 
+        'add-user-details.html', 
+        {'form': form, 'parishes': parishes, 'roles': roles}
+    )
+
+def list_users(request):
     users = UserRegistration.objects.all()
-    return render(request, "view-account-details.html", {"users": users})
+    return render(request, "list-users.html", {"users": users})
 
+def view_user_details(request, user_id):
+    user = get_object_or_404(UserRegistration, id=user_id)
+    return render(request, 'view-user-details.html', {'user': user})
 
+def edit_user_details(request, pk):
+    user = get_object_or_404(UserRegistration, pk=pk)
+
+    if request.method == 'POST':
+        form = UserRegistrationForm(request.POST, instance=user)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "User details updated successfully.")
+            return redirect('edit_user_details', pk=user.pk)
+        
+    else:
+        form = UserRegistrationForm(instance=user)
+
+    return render(request, 'edit-user-details.html', {'form': form, 'user': user})
+
+# Event Management
 def add_event_type(request):
     if request.method == 'POST':
         form = EventTypeForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('event_list')
+            messages.success(request, "Event type saved successfully.")
+            return redirect('add_event_type')
     else:
         form = EventTypeForm()
     return render(request, 'event-type-form.html', {'form': form})
+
+def add_event(request):
+    if request.method == 'POST':
+        form = EventForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Event saved successfully.')
+            return redirect('add_event')
+    else:
+        form = EventForm()
+    return render(request, 'event-form.html', {'form': form})
+
+def view_event_details(request):
+    events = Event.objects.all()
+    return render(request, 'view-event-details.html', {'events': events})

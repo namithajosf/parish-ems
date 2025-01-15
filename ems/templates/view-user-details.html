@@ -1,14 +1,14 @@
 {% extends 'index.html' %}
 {% block content %}
 
-<title>{% block title %}Roles{% endblock %}</title>
+<title>{% block title %}User Details{% endblock %}</title>
 
 <div class="container-fluid">
     <div class="card card-body py-3">
         <div class="row align-items-center">
             <div class="col-12">
                 <div class="d-sm-flex align-items-center justify-space-between">
-                    <h4 class="mb-4 mb-sm-0 card-title">Roles</h4>
+                    <h4 class="mb-4 mb-sm-0 card-title">User Details</h4>
                     <nav aria-label="breadcrumb" class="ms-auto">
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item d-flex align-items-center">
@@ -17,7 +17,7 @@
                                 </a>
                             </li>
                             <li class="breadcrumb-item" aria-current="page">
-                                <span class="badge fw-medium fs-2 bg-primary-subtle text-primary">Role</span>
+                                <span class="badge fw-medium fs-2 bg-primary-subtle text-primary">User</span>
                             </li>
                         </ol>
                     </nav>
@@ -28,25 +28,41 @@
     
     <div class="card">
         <div class="card-header text-bg-primary">
-            <h5 class="mb-0 text-white">{{ role.role }}</h5>
+            <h5 class="mb-0 text-white">{{ user.username }}</h5>
         </div>
         <div class="card-body">
             <div class="row">
                 <div class="col-md-6">
-                    <strong>Role:</strong> {{ role.role }}
+                    <strong>Username:</strong> {{ user.username }}
+                </div>
+                <div class="col-md-6">
+                    <strong>Email:</strong> {{ user.email }}
                 </div>
             </div>
             <div class="row mt-3">
                 <div class="col-md-6">
-                    <strong>Status:</strong> {{ role.status }}
+                    <strong>Contact Number:</strong> {{ user.contact_number }}
+                </div>
+                <div class="col-md-6">
+                    <strong>Parish:</strong> {{ user.parish }}
                 </div>
             </div>
+            
+            <div class="row mt-3">
+                <div class="col-md-6">
+                    <strong>Role:</strong> {{ user.role }}
+                </div>
+                <div class="col-md-6">
+                    <strong>Status:</strong> {{ user.status }}
+                </div>
+            </div>
+
             <div class="mt-4">
-                <a href="{% url 'edit_role_details' pk=role.pk %}" class="btn btn-primary">
+                <a href="{% url 'edit_user_details' pk=user.pk %}" class="btn btn-primary">
                     <i class="ti ti-edit fs-5"></i>
                     Edit
                 </a>
-                <a href="{% url 'list_roles' %}" class="btn bg-danger-subtle text-danger ms-6">
+                <a href="{% url 'list_users' %}" class="btn bg-danger-subtle text-danger ms-6">
                     Back
                 </a>
                 

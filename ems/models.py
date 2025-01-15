@@ -1,12 +1,15 @@
 from django.db import models
+from .choices import STATUS_CHOICES, EVENT_STATUS_CHOICES
+
 
 class Role(models.Model):
     role = models.CharField(max_length=255)
-    status = models.CharField(max_length=255)
+    status = models.CharField(max_length=255, choices=STATUS_CHOICES)
     created_time = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.role
+
 
 class Parish(models.Model):
     parish_name = models.CharField(max_length=255)
@@ -16,33 +19,49 @@ class Parish(models.Model):
     address = models.TextField(null=True, blank=True)
     email = models.EmailField()
     contact_number = models.CharField(max_length=15)
-    status = models.CharField(max_length=10, choices=[('Active', 'Active'), ('Inactive', 'Inactive')], default='Active')
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='Active')
 
     def __str__(self):
         return self.parish_name
 
+
 class EventType(models.Model):
     name = models.CharField(max_length=100)
     duration = models.CharField(max_length=50)
-    status_choices = [
-        ('Pending', 'Pending'),
-        ('Approved', 'Approved'),
-        ('Completed', 'Completed'),
-        ('Cancelled', 'Cancelled'),
-    ]
-    status = models.CharField(max_length=20, choices=status_choices, default='Pending')
-
     def __str__(self):
         return self.name
-    
+
+
 class UserRegistration(models.Model):
     username = models.CharField(max_length=100)
     password = models.CharField(max_length=100)
     email = models.EmailField()
     contact_number = models.CharField(max_length=15)
-    role = models.CharField(max_length=10)
-    status = models.CharField(max_length=10, choices=[('Active', 'Active'), ('Inactive', 'Inactive')], default='Active')
-    parish = models.CharField(max_length=100)
+    role = models.ForeignKey(Role, on_delete=models.CASCADE)
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='Active')
+    parish = models.ForeignKey(Parish, on_delete=models.CASCADE)
 
     def __str__(self):
         return f"{self.username} - {self.parish}"
+
+
+class Event(models.Model):
+    event_name = models.CharField(max_length=255)
+    event_type = models.CharField(max_length=255)
+    event_date = models.DateField()
+    event_time = models.TimeField()
+    event_description = models.TextField(null=True, blank=True)
+
+    parish = models.ForeignKey(Parish, on_delete=models.CASCADE)
+    priest = models.ForeignKey(
+        UserRegistration,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        limit_choices_to={'role__role': 'Priest'}
+    )
+    status = models.CharField(max_length=15, choices=EVENT_STATUS_CHOICES, default='Scheduled')
+    remarks = models.TextField(null=True, blank=True)
+
+    def __str__(self):
+        return self.event_name

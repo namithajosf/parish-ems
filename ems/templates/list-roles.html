@@ -1,0 +1,75 @@
+{% extends 'index.html' %}
+{% block content %}
+
+<title>{% block title %}Roles{% endblock %}</title>
+
+<div class="container-fluid">
+    <div class="card card-body py-3">
+        <div class="row align-items-center">
+            <div class="col-12">
+                <div class="d-sm-flex align-items-center justify-space-between">
+                    <h4 class="mb-4 mb-sm-0 card-title">Role Details</h4>
+                    <nav aria-label="breadcrumb" class="ms-auto">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item d-flex align-items-center">
+                                <a class="text-muted text-decoration-none d-flex" href="{% url 'index' %}">
+                                    <iconify-icon icon="solar:home-2-line-duotone" class="fs-6"></iconify-icon>
+                                </a>
+                            </li>
+                            <li class="breadcrumb-item" aria-current="page">
+                                <span class="badge fw-medium fs-2 bg-primary-subtle text-primary">Role</span>
+                            </li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="card w-100 position-relative overflow-hidden">
+        <div class="px-4 py-3 border-bottom">
+            <h4 class="card-title mb-0">Roles</h4>
+        </div>
+        
+        <div class="card-body p-4">
+            <div class="table-responsive mb-4 border rounded-1">
+                <table class="table text-nowrap mb-0 align-middle">
+                    <thead class="table-primary">
+                        <tr>
+                            <th>
+                                <h6 class="fs-4 fw-semibold mb-0">Role</h6>
+                            </th>
+                            <th>
+                                <h6 class="fs-4 fw-semibold mb-0">Status</h6>
+                            </th>
+                            <th>
+                                <h6 class="fs-4 fw-semibold mb-0">Actions</h6>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for role in roles %}
+                            <tr>
+                                <td>
+                                    <h6 class="fs-4 fw-semibold mb-0">{{ role.role }}</h6>
+                                </td>
+                                <td>
+                                    {% if role.status == 'Active' %}
+                                        <span class="badge bg-success-subtle text-success"> {{ role.status }}</span>
+                                    {% elif role.status == 'Inactive' %}
+                                        <span class="badge bg-danger-subtle text-danger"> {{ role.status }}</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <a href="{% url 'view_role_details' role.id %}" class="btn btn-primary btn-sm">View More</a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
