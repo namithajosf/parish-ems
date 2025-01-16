@@ -16,10 +16,6 @@
         <title>{% block title %}Dashboard{% endblock %}</title>
     </head>
     <body>
-        <!-- Preloader -->
-        <div class="preloader">
-            <img src="{% static '/dist/assets/images/logos/favicon.png' %}" alt="loader" class="lds-ripple img-fluid" />
-        </div>
         <div id="main-wrapper">
             <!-- Sidebar Start -->
             <aside class="side-mini-panel with-vertical">
@@ -48,21 +44,27 @@
                                     <li class="sidebar-item">
                                         <a class="sidebar-link" href="{% url 'index' %}">
                                             <iconify-icon icon="mdi:view-dashboard-outline"></iconify-icon>Dashboard
-                                        </a>                                        
+                                        </a>
                                     </li>
                                     <li class="sidebar-item">
                                         <a class="sidebar-link" href="{% url 'app_calendar' %}">
                                             <iconify-icon icon="mdi:calendar-month-outline"></iconify-icon>Calendar
-                                        </a>                                        
+                                        </a>
                                     </li>
                                     <li class="sidebar-item">
                                         <a class="sidebar-link" href="{% url 'list_events' %}">
                                             <iconify-icon icon="mdi:calendar-star"></iconify-icon>Events
                                         </a>
                                     </li>
+                                    <li class="sidebar-item">
+                                        <a class="sidebar-link" href="{% url 'settings' %}">
+                                            <iconify-icon icon="mdi:cog-outline"></iconify-icon>Settings
+                                        </a>
+                                    </li>
                                     
                                 </ul>
                             </nav>
+                            
                         </div>
                     </div>
                 </div>

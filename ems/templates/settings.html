@@ -1,0 +1,52 @@
+{% extends 'index.html' %}
+{% block content %}
+
+<title>{% block title %}Settings{% endblock %}</title>
+
+
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title mb-3">Settings</h4>
+            <ol class="list-group">
+                <a class="list-group-item d-flex justify-content-between align-items-center m-0 hoverable-link" href="{% url 'list_parishes' %}" style="height: 60px;">
+                    <div class="ms-2 me-auto">
+                        <div class="fw-bold">Parishes</div>
+                    </div>
+                </a>
+                <a class="list-group-item d-flex justify-content-between align-items-center m-0 hoverable-link" href="{% url 'list_roles' %}" style="height: 60px;">
+                    <div class="ms-2 me-auto">
+                        <div class="fw-bold">Roles</div>
+                    </div>
+                </a>
+                <a class="list-group-item d-flex justify-content-between align-items-center m-0 hoverable-link" href="{% url 'list_users' %}" style="height: 60px;">
+                    <div class="ms-2 me-auto">
+                        <div class="fw-bold">Users</div>
+                    </div>
+                </a>
+                <a class="list-group-item d-flex justify-content-between align-items-center m-0 hoverable-link" href="{% url 'list_event_types' %}" style="height: 60px;">
+                    <div class="ms-2 me-auto">
+                        <div class="fw-bold">Event Types</div>
+                    </div>
+                </a>
+            </ol>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Add hover effects
+    const hoverableLinks = document.querySelectorAll('.hoverable-link');
+
+    hoverableLinks.forEach(link => {
+        link.addEventListener('mouseover', () => {
+            link.classList.add('active');
+        });
+
+        link.addEventListener('mouseout', () => {
+            link.classList.remove('active');
+        });
+    });
+</script>
+
+{% endblock %}

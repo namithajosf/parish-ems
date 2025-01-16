@@ -1,0 +1,27 @@
+{% extends 'index.html' %}
+{% block content %}
+
+<title>{% block title %}Event Types{% endblock %}</title>
+
+<div class="container-fluid">
+    
+    <div class="card w-100 position-relative overflow-hidden">
+        <div class="px-4 py-3 border-bottom d-flex align-items-center">
+            <a class="text-muted text-decoration-none d-flex" href="javascript:void(0);" onclick="window.history.back();" style="margin-right: 10px;">
+                <iconify-icon icon="mdi:arrow-left" class="fs-6"></iconify-icon>
+            </a>
+            <h4 class="card-title mb-0 me-auto">Event Types</h4>
+            <a href="{% url 'add_event_type_details' %}" class="btn btn-primary d-flex align-items-center">
+                <iconify-icon icon="mdi:plus" class="me-2"></iconify-icon> Add
+            </a>
+        </div>
+    </div>
+
+    
+    
+        
+        
+    
+</div>
+
+{% endblock %}

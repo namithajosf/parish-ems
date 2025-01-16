@@ -4,58 +4,46 @@
 <title>{% block title %}Parish Details{% endblock %}</title>
 
 <div class="container-fluid">
-    <div class="card card-body py-3">
-        <div class="row align-items-center">
-            <div class="col-12">
-                <div class="d-sm-flex align-items-center justify-space-between">
-                    <h4 class="mb-4 mb-sm-0 card-title">Parish Details</h4>
-                    <nav aria-label="breadcrumb" class="ms-auto">
-                        <ol class="breadcrumb">
-                            <li class="breadcrumb-item d-flex align-items-center">
-                                <a class="text-muted text-decoration-none d-flex" href="{% url 'index' %}">
-                                    <iconify-icon icon="solar:home-2-line-duotone" class="fs-6"></iconify-icon>
-                                </a>
-                            </li>
-                            <li class="breadcrumb-item" aria-current="page">
-                                <span class="badge fw-medium fs-2 bg-primary-subtle text-primary">Parish</span>
-                            </li>
-                        </ol>
-                    </nav>
-                </div>
-            </div>
+    
+    <div class="card w-100 position-relative overflow-hidden">
+        <div class="px-4 py-3 border-bottom d-flex align-items-center">
+            <a class="text-muted text-decoration-none d-flex" href="javascript:void(0);" onclick="window.history.back();" style="margin-right: 10px;">
+                <iconify-icon icon="mdi:arrow-left" class="fs-6"></iconify-icon>
+            </a>
+            <h4 class="card-title mb-0 me-auto">Parishes</h4>
+            <a href="{% url 'add_parish_details' %}" class="btn btn-primary d-flex align-items-center">
+                <iconify-icon icon="mdi:plus" class="me-2"></iconify-icon> Add
+            </a>
         </div>
     </div>
     
-    <div class="card w-100 position-relative overflow-hidden">
-        <div class="px-4 py-3 border-bottom">
-            <h4 class="card-title mb-0">Parish Details</h4>
-        </div>
-        
-        <div class="card-body p-4">
-            <div class="table-responsive mb-4 border rounded-1">
-                <table class="table text-nowrap mb-0 align-middle">
-                    <thead class="table-primary">
-                        <tr>
-                            <th>
-                                <h6 class="fs-4 fw-semibold mb-0">Parish Name</h6>
-                            </th>
-                            <th>
-                                <h6 class="fs-4 fw-semibold mb-0">Parent Parish</h6>
-                            </th>
-                            <th>
-                                <h6 class="fs-4 fw-semibold mb-0">Secretary Name</h6>
-                            </th>
-                            <th>
-                                <h6 class="fs-4 fw-semibold mb-0">Place of Parish</h6>
-                            </th>
-                            <th>
-                                <h6 class="fs-4 fw-semibold mb-0">Email</h6>
-                            </th>
-                            <th>
-                                <h6 class="fs-4 fw-semibold mb-0">Actions</h6>
-                            </th>
-                        </tr>
-                    </thead>
+
+
+    <div class="card-body p-4">
+        <div class="table-responsive mb-4 border rounded-1">
+            <table class="table text-nowrap mb-0 align-middle">
+                <thead class="table-primary">
+                    <tr>
+                        <th>
+                            <h6 class="fs-4 fw-semibold mb-0">Parish Name</h6>
+                        </th>
+                        <th>
+                            <h6 class="fs-4 fw-semibold mb-0">Parent Parish</h6>
+                        </th>
+                        <th>
+                            <h6 class="fs-4 fw-semibold mb-0">Secretary Name</h6>
+                        </th>
+                        <th>
+                            <h6 class="fs-4 fw-semibold mb-0">Place of Parish</h6>
+                        </th>
+                        <th>
+                            <h6 class="fs-4 fw-semibold mb-0">Email</h6>
+                        </th>
+                        <th>
+                            <h6 class="fs-4 fw-semibold mb-0">Actions</h6>
+                        </th>
+                    </tr>
+                </thead>
                     <tbody>
                         {% for parish in parishes %}
                             <tr>

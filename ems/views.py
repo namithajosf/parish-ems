@@ -10,8 +10,8 @@ def index(request):
 def app_calendar(request):
     return render(request, 'app-calendar.html')
 
-def app_kanban(request):
-    return render(request, 'app-kanban.html')
+def settings(request):
+    return render(request, 'settings.html')
 
 # Role Management
 def add_role_details(request):
@@ -134,28 +134,26 @@ def edit_user_details(request, pk):
     return render(request, 'edit-user-details.html', {'form': form, 'user': user})
 
 # Event Management
-def add_event_type(request):
-    if request.method == 'POST':
-        form = EventTypeForm(request.POST)
-        if form.is_valid():
-            form.save()
-            messages.success(request, "Event type saved successfully.")
-            return redirect('add_event_type')
-    else:
-        form = EventTypeForm()
-    return render(request, 'event-type-form.html', {'form': form})
+def add_event_details(request):
+    return render(request, 'add-event-details.html')
 
-def add_event(request):
-    if request.method == 'POST':
-        form = EventForm(request.POST)
-        if form.is_valid():
-            form.save()
-            messages.success(request, 'Event saved successfully.')
-            return redirect('add_event')
-    else:
-        form = EventForm()
-    return render(request, 'event-form.html', {'form': form})
+def list_events(request):
+    return render(request, 'list-events.html')
 
 def view_event_details(request):
-    events = Event.objects.all()
-    return render(request, 'view-event-details.html', {'events': events})
+    return render(request, 'view-event-details.html')
+
+def edit_event_details(request):
+    return render(request, 'edit-event-details.html')
+
+def add_event_type_details(request):
+    return render(request, 'add-event-type-details.html')
+
+def list_event_types(request):
+    return render(request, 'list-event-types.html')
+
+def view_event_type_details(request):
+    return render(request, 'view-event-type-details.html')
+
+def edit_event_type_details(request):
+    return render(request, 'edit-event-type-details.html')
