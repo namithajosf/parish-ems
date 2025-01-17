@@ -3,30 +3,33 @@
 
 <title>{% block title %}Settings{% endblock %}</title>
 
-
 <div class="container-fluid">
     <div class="card">
         <div class="card-body">
-            <h4 class="card-title mb-3">Settings</h4>
+            <h4 class="card-title mb-3" style="font-weight: 700; color: #000;">Settings</h4>
             <ol class="list-group">
                 <a class="list-group-item d-flex justify-content-between align-items-center m-0 hoverable-link" href="{% url 'list_parishes' %}" style="height: 60px;">
-                    <div class="ms-2 me-auto">
-                        <div class="fw-bold">Parishes</div>
+                    <div class="d-flex align-items-center">
+                        <iconify-icon icon="mdi:church" style="font-size: 24px; margin-right: 10px; color: #28282d;"></iconify-icon>
+                        <div class="fw-bold" style="font-weight: 700; color: #28282d;">Parishes</div>
                     </div>
                 </a>
                 <a class="list-group-item d-flex justify-content-between align-items-center m-0 hoverable-link" href="{% url 'list_roles' %}" style="height: 60px;">
-                    <div class="ms-2 me-auto">
-                        <div class="fw-bold">Roles</div>
+                    <div class="d-flex align-items-center">
+                        <iconify-icon icon="mdi:account-tie" style="font-size: 24px; margin-right: 10px; color: #28282d;"></iconify-icon>
+                        <div class="fw-bold" style="font-weight: 700; color: #28282d;">Roles</div>
                     </div>
                 </a>
                 <a class="list-group-item d-flex justify-content-between align-items-center m-0 hoverable-link" href="{% url 'list_users' %}" style="height: 60px;">
-                    <div class="ms-2 me-auto">
-                        <div class="fw-bold">Users</div>
+                    <div class="d-flex align-items-center">
+                        <iconify-icon icon="mdi:accounts" style="font-size: 24px; margin-right: 10px; color: #28282d;"></iconify-icon>
+                        <div class="fw-bold" style="font-weight: 700; color: #28282d;">Users</div>
                     </div>
                 </a>
                 <a class="list-group-item d-flex justify-content-between align-items-center m-0 hoverable-link" href="{% url 'list_event_types' %}" style="height: 60px;">
-                    <div class="ms-2 me-auto">
-                        <div class="fw-bold">Event Types</div>
+                    <div class="d-flex align-items-center">
+                        <iconify-icon icon="mdi:calendar-multiple" style="font-size: 24px; margin-right: 10px; color: #28282d;"></iconify-icon>
+                        <div class="fw-bold" style="font-weight: 700; color: #28282d;">Event Types</div>
                     </div>
                 </a>
             </ol>
