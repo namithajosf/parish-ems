@@ -83,6 +83,12 @@ def edit_parish_details(request, pk):
 
     return render(request, 'edit-parish-details.html', {'form': form, 'parish': parish})
 
+def delete_parish_details(request, parish_id):
+    parish = get_object_or_404(Parish, id=parish_id)
+    parish.delete()
+    messages.success(request, "Parish deleted successfully.")
+    return redirect('list_parishes')
+
 # User Account Management
 def add_user_details(request):
     if request.method == 'POST':
@@ -120,6 +126,8 @@ def view_user_details(request, user_id):
 
 def edit_user_details(request, pk):
     user = get_object_or_404(UserRegistration, pk=pk)
+    parishes = Parish.objects.all()
+    roles = Role.objects.all()
 
     if request.method == 'POST':
         form = UserRegistrationForm(request.POST, instance=user)
@@ -131,7 +139,11 @@ def edit_user_details(request, pk):
     else:
         form = UserRegistrationForm(instance=user)
 
-    return render(request, 'edit-user-details.html', {'form': form, 'user': user})
+    return render(
+        request,
+        'edit-user-details.html',
+        {'form': form, 'parishes': parishes, 'roles': roles, 'user': user}
+    )
 
 # Event Management
 def add_event_details(request):

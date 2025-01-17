@@ -2,7 +2,7 @@ from django.urls import path
 from .views import (
     index, app_calendar, settings,
     add_user_details, list_users, view_user_details, edit_user_details,   
-    add_parish_details, list_parishes, view_parish_details, edit_parish_details,   
+    add_parish_details, list_parishes, view_parish_details, edit_parish_details, delete_parish_details,  
     add_role_details, list_roles, view_role_details, edit_role_details, 
     add_event_details, list_events, view_event_details, edit_event_details,
     add_event_type_details, list_event_types, view_event_type_details, edit_event_type_details
@@ -17,6 +17,7 @@ urlpatterns = [
     path('list-parishes/', list_parishes, name='list_parishes'),
     path("view-parish-details/<int:parish_id>/", view_parish_details, name="view_parish_details"),
     path('edit-parish-details/<int:pk>/', edit_parish_details, name='edit_parish_details'),
+    path('delete-parish-details/<int:parish_id>/', delete_parish_details, name='delete_parish_details'),
 
     path('add-user-details/', add_user_details, name='add_user_details'),
     path('list-users/', list_users, name='list_users'),
