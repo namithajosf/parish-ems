@@ -48,6 +48,12 @@ def edit_role_details(request, pk):
 
     return render(request, 'edit-role-details.html', {'form': form, 'role': role})
 
+def delete_role_details(request, role_id):
+    role = get_object_or_404(Role, id=role_id)
+    role.delete()
+    messages.success(request, "Role deleted successfully.")
+    return redirect('list_roles')
+
 # Parish Management
 def add_parish_details(request):
     if request.method == 'POST':
@@ -144,6 +150,12 @@ def edit_user_details(request, pk):
         'edit-user-details.html',
         {'form': form, 'parishes': parishes, 'roles': roles, 'user': user}
     )
+
+def delete_user_details(request, user_id):
+    user = get_object_or_404(UserRegistration, id=user_id)
+    user.delete()
+    messages.success(request, "User deleted successfully.")
+    return redirect('list_users')
 
 # Event Management
 def add_event_details(request):
