@@ -21,7 +21,7 @@ if ((at = "vertical")) {
       function findMatchingElement() {
         var currentUrl = window.location.href;
         var anchors = document.querySelectorAll("#sidebarnav a");
-
+ 
         for (var i = 0; i < anchors.length; i++) {
           if (anchors[i].href === currentUrl) {
             return anchors[i];

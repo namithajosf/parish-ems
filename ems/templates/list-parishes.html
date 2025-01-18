@@ -16,71 +16,116 @@
             </a>
         </div>
     </div>
-    
 
 
     <div class="card-body p-4">
+        <!-- Search Bar -->
+        <form method="get" class="mb-4 d-flex align-items-center">
+            {% if search_query %}
+                <a class="text-muted text-decoration-none d-flex" href="{% url 'list_roles' %}" style="margin-right: 10px;">
+                    <iconify-icon icon="mdi:arrow-left" class="fs-6"></iconify-icon>
+                </a>
+            {% endif %}
+            <input
+                type="text"
+                name="q"
+                value="{{ search_query }}"
+                class="form-control me-2"
+                placeholder="Search Parish"
+            >
+            <button type="submit" class="btn btn-primary">Search</button>
+        </form>
+    
+        <!-- Pagination Controls -->
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5 class="fw-semibold"></h5>
+            <nav aria-label="Pagination">
+                <ul class="pagination">
+                    {% if page_obj.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?q={{ search_query }}&page=1">First</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?q={{ search_query }}&page={{ page_obj.previous_page_number }}">Previous</a>
+                        </li>
+                    {% endif %}
+                    <li class="page-item disabled">
+                        <span class="page-link">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+                    </li>
+                    {% if page_obj.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?q={{ search_query }}&page={{ page_obj.next_page_number }}">Next</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?q={{ search_query }}&page={{ page_obj.paginator.num_pages }}">Last</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+    
+        <!-- Table -->
         <div class="table-responsive mb-4 border rounded-1">
             <table class="table text-nowrap mb-0 align-middle">
                 <thead class="table-primary">
                     <tr>
-                        <th>
-                            <h6 class="fs-4 fw-semibold mb-0">Parish Name</h6>
-                        </th>
-                        <th>
-                            <h6 class="fs-4 fw-semibold mb-0">Parent Parish</h6>
-                        </th>
-                        <th>
-                            <h6 class="fs-4 fw-semibold mb-0">Secretary Name</h6>
-                        </th>
-                        <th>
-                            <h6 class="fs-4 fw-semibold mb-0">Place of Parish</h6>
-                        </th>
-                        <th>
-                            <h6 class="fs-4 fw-semibold mb-0">Actions</h6>
-                        </th>
+                        <th><h6 class="fs-4 fw-semibold mb-0">Parish Name</h6></th>
+                        <th><h6 class="fs-4 fw-semibold mb-0">Parent Parish</h6></th>
+                        <th><h6 class="fs-4 fw-semibold mb-0">Secretary Name</h6></th>
+                        <th><h6 class="fs-4 fw-semibold mb-0">Place of Parish</h6></th>
+                        <th><h6 class="fs-4 fw-semibold mb-0">Actions</h6></th>
                     </tr>
                 </thead>
-                    <tbody>
-                        {% for parish in parishes %}
-                            <tr>
-                                <td>
-                                    <h6 class="fs-4 fw-semibold mb-0">{{ parish.parish_name }}</h6>
-                                </td>
-                                <td>
-                                    <p class="mb-0 fw-normal fs-4">
-                                        {{ parish.parent_parish }}
-                                    </p>
-                                </td>
-                                <td>
-                                    <p class="mb-0 fw-normal fs-4">
-                                        {{ parish.secretary_name }}
-                                    </p>
-                                </td>
-                                <td>
-                                    <p class="mb-0 fw-normal fs-4">
-                                        {{ parish.place_of_parish }}
-                                    </p>
-                                </td>
-                                <td class="d-flex justify-content-center align-items-center" style="height: 60px;">
-                                    <a href="{% url 'view_parish_details' parish.id %}" class="btn btn-primary btn-sm me-2">View More</a>
-                                    <a href="{% url 'delete_parish_details' parish.id %}" class="btn btn-sm d-flex justify-content-center align-items-center" onclick="return confirm('Are you sure you want to delete this parish?');">
-                                        <iconify-icon icon="mdi:delete" style="font-size: 18px; color: #e51010;"></iconify-icon>
-                                    </a>
-                                </td>
-                                      
-                                
-                                
-                                
-                                
-                                
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
+                <tbody>
+                    {% for parish in page_obj.object_list %}
+                        <tr>
+                            <td><h6 class="fs-4 fw-semibold mb-0">{{ parish.parish_name }}</h6></td>
+                            <td><p class="mb-0 fw-normal fs-4">{{ parish.parent_parish }}</p></td>
+                            <td><p class="mb-0 fw-normal fs-4">{{ parish.secretary_name }}</p></td>
+                            <td><p class="mb-0 fw-normal fs-4">{{ parish.place_of_parish }}</p></td>
+                            <td class="d-flex justify-content-center align-items-center" style="height: 60px;">
+                                <a href="{% url 'view_parish_details' parish.id %}" class="btn btn-primary btn-sm me-2">View More</a>
+                                <a href="{% url 'delete_parish_details' parish.id %}" class="btn btn-sm d-flex justify-content-center align-items-center" onclick="return confirm('Are you sure you want to delete this parish?');">
+                                    <iconify-icon icon="mdi:delete" style="font-size: 18px; color: #e51010;"></iconify-icon>
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    
+        <!-- Pagination Controls (Optional Duplicate at Bottom) -->
+        <div class="d-flex justify-content-end mt-3">
+            <nav aria-label="Pagination">
+                <ul class="pagination">
+                    {% if page_obj.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?q={{ search_query }}&page=1">First</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?q={{ search_query }}&page={{ page_obj.previous_page_number }}">Previous</a>
+                        </li>
+                    {% endif %}
+                    <li class="page-item disabled">
+                        <span class="page-link">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+                    </li>
+                    {% if page_obj.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?q={{ search_query }}&page={{ page_obj.next_page_number }}">Next</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?q={{ search_query }}&page={{ page_obj.paginator.num_pages }}">Last</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
         </div>
     </div>
+    
+
+
+    
 </div>
 
 {% endblock %}
