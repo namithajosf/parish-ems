@@ -17,8 +17,8 @@ class Parish(models.Model):
     secretary_name = models.CharField(max_length=255, null=True, blank=True)
     place_of_parish = models.CharField(max_length=255, null=True, blank=True)
     address = models.TextField(null=True, blank=True)
-    email = models.EmailField()
-    contact_number = models.CharField(max_length=15)
+    email = models.EmailField(null=True)
+    contact_number = models.CharField(max_length=15, null=True)
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='Active')
 
     def __str__(self):
