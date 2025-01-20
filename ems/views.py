@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.apps import apps
 from django.contrib import messages
 from django.db.models import Q
 from django.contrib.auth.hashers import make_password
@@ -217,19 +218,46 @@ def delete_parish_details(request, parish_id):
     parish.status = "Inactive"
     parish.save()
 
-    messages.success(request, "Parish details deleted successfully.")
     return redirect('list_parishes')
 
 def delete_role_details(request, role_id):
     role = get_object_or_404(Role, id=role_id)
-    role.delete()
-    messages.success(request, "Role deleted successfully.")
+
+    role.status = "Inactive"
+    role.save()
+
     return redirect('list_roles')
 
 def delete_user_details(request, user_id):
     user = get_object_or_404(UserRegistration, id=user_id)
-    user.delete()
-    messages.success(request, "User deleted successfully.")
+
+    user.status = "Inactive"
+    user.save()
+
     return redirect('list_users')
 
-# Event Management
+# Trash --------------------------------------------------------------------------------------------------------------------------------------
+
+def show_trash(request):
+    inactive_parishes = Parish.objects.filter(status='Inactive')
+    inactive_roles = Role.objects.filter(status='Inactive')
+    inactive_users = UserRegistration.objects.filter(status='Inactive')
+
+    context = {
+        'inactive_parishes': inactive_parishes,
+        'inactive_roles': inactive_roles,
+        'inactive_users': inactive_users,
+    }
+    return render(request, 'trash.html', context)
+
+def restore_object(request, model_name, object_id):
+    model = apps.get_model('ems', model_name) 
+    
+    obj = get_object_or_404(model, id=object_id)
+    
+    if hasattr(obj, 'status'):
+        obj.status = 'Active'
+        obj.save()
+    
+    messages.success(request, f"{model_name} restored successfully.")
+    return redirect('trash')

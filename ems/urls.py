@@ -1,6 +1,6 @@
 from django.urls import path
 from .views import (
-    index, app_calendar, settings,
+    index, app_calendar, settings, show_trash, restore_object, show_trash,
     add_user_details, list_users, view_user_details, edit_user_details, delete_user_details, 
     add_parish_details, list_parishes, view_parish_details, edit_parish_details, delete_parish_details,  
     add_role_details, list_roles, view_role_details, edit_role_details, delete_role_details, 
@@ -43,5 +43,8 @@ urlpatterns = [
     path("view-event-type-details/<int:event_id>/", view_event_type_details, name="view_event_type_details"),
     path('edit-event-type-details/<int:pk>/', edit_event_type_details, name='edit_event_type_details'),
 
+    path('trash/', show_trash, name='trash'),
+    path('trash/', show_trash, name='trash'),  # Trash page
+    path('restore/<str:model_name>/<int:object_id>/', restore_object, name='restore_object'),  # Restore an object
 
 ]
