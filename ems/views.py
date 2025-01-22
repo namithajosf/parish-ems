@@ -6,6 +6,18 @@ from django.contrib.auth.hashers import make_password
 from django.core.paginator import Paginator
 from .models import Parish, Role, UserRegistration, EventType, Event
 from .forms import RoleForm, ParishForm, UserRegistrationForm, EventTypeForm, EventForm
+from datetime import timedelta
+
+
+def format_timedelta(duration):
+    if isinstance(duration, timedelta):
+        total_seconds = int(duration.total_seconds())
+        hours = total_seconds // 3600
+        minutes = (total_seconds % 3600) // 60
+        seconds = total_seconds % 60
+        return f"{hours:02}:{minutes:02}:{seconds:02}"
+    return str(duration)
+
 
 def index(request):
     return render(request, 'index.html')
@@ -23,7 +35,7 @@ def add_role_details(request):
         if form.is_valid():
             form.save()
             messages.success(request, "Role details saved successfully.")
-            return redirect('add_role_details')
+            return redirect('list_roles')
     else:
         form = RoleForm()
     return render(request, 'add-role-details.html', {'form': form})
@@ -34,7 +46,7 @@ def add_parish_details(request):
         if form.is_valid():
             form.save()
             messages.success(request, "Parish details saved successfully.")
-            return redirect('add_parish_details')
+            return redirect('list_parishes')
     else:
         form = ParishForm()
     return render(request, 'add-parish-details.html', {'form': form})
@@ -52,7 +64,7 @@ def add_user_details(request):
                 user.password = make_password(password)
                 user.save()
                 messages.success(request, "Account saved successfully!")
-                return redirect('add_user_details')
+                return redirect('list_users')
     else:
         form = UserRegistrationForm()
 
@@ -65,11 +77,21 @@ def add_user_details(request):
         {'form': form, 'parishes': parishes, 'roles': roles}
     )
 
+def add_event_type_details(request):
+    if request.method == 'POST':
+        form = EventTypeForm(request.POST)
+        
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Event Type details saved successfully.")
+            return redirect('list_event_types')
+    else:
+        form = EventTypeForm()
+    return render(request, 'add-event-type-details.html', {'form': form})
+
 def add_event_details(request):
     return render(request, 'add-event-details.html')
 
-def add_event_type_details(request):
-    return render(request, 'add-event-type-details.html')
 
 # <--------- List details --------->
 def list_roles(request):
@@ -127,7 +149,24 @@ def list_users(request):
     })
 
 def list_event_types(request):
-    return render(request, 'list-event-types.html')
+    
+    search_query = request.GET.get('q', '')
+    event_types = EventType.objects.filter(status="Active")
+
+    if search_query:
+        event_types = event_types.filter(
+            Q(event_type__icontains=search_query)
+        )
+
+    paginator = Paginator(event_types, 10)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    return render(request, "list-event-types.html", {
+        "page_obj": page_obj,
+        "search_query": search_query,
+    })
+
 
 def list_events(request):
     return render(request, 'list-events.html')
@@ -146,8 +185,9 @@ def view_user_details(request, user_id):
     user = get_object_or_404(UserRegistration, id=user_id)
     return render(request, 'view-user-details.html', {'user': user})
 
-def view_event_type_details(request):
-    return render(request, 'view-event-type-details.html')
+def view_event_type_details(request, event_type_id):
+    event_type = get_object_or_404(EventType, id=event_type_id)
+    return render(request, 'view-event-type-details.html', {'event_type': event_type})
 
 def view_event_details(request):
     return render(request, 'view-event-details.html')
@@ -161,7 +201,7 @@ def edit_role_details(request, pk):
         if form.is_valid():
             form.save()
             messages.success(request, "Role details updated successfully.")
-            return redirect('edit_role_details', pk=role.pk)
+            return redirect('list_roles', pk=role.pk)
         
     else:
         form = RoleForm(instance=role)
@@ -176,7 +216,7 @@ def edit_parish_details(request, pk):
         if form.is_valid():
             form.save()
             messages.success(request, "Parish details updated successfully.")
-            return redirect('edit_parish_details', pk=parish.pk)
+            return redirect('list_parishes', pk=parish.pk)
         
     else:
         form = ParishForm(instance=parish)
@@ -193,7 +233,7 @@ def edit_user_details(request, pk):
         if form.is_valid():
             form.save()
             messages.success(request, "User details updated successfully.")
-            return redirect('edit_user_details', pk=user.pk)
+            return redirect('list_users', pk=user.pk)
         
     else:
         form = UserRegistrationForm(instance=user)
@@ -204,8 +244,25 @@ def edit_user_details(request, pk):
         {'form': form, 'parishes': parishes, 'roles': roles, 'user': user}
     )
 
-def edit_event_type_details(request):
-    return render(request, 'edit-event-type-details.html')
+def edit_event_type_details(request, pk):
+    event_type = get_object_or_404(EventType, pk=pk)
+
+    if request.method == 'POST':
+        form = EventTypeForm(request.POST, instance=event_type)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Event Type details updated successfully.")
+
+            return redirect('list_event_types', pk=event_type.pk)
+        
+    else:
+        form = EventTypeForm(instance=event_type)
+        event_type.duration_formatted = format_timedelta(event_type.duration)
+
+    return render(request, 'edit-event-type-details.html', {'form': form, 'event_type': event_type})
+
+
+
 
 def edit_event_details(request):
     return render(request, 'edit-event-details.html')
@@ -236,17 +293,28 @@ def delete_user_details(request, user_id):
 
     return redirect('list_users')
 
+def delete_event_type_details(request, event_type_id):
+    event_type = get_object_or_404(EventType, id=event_type_id)
+
+    event_type.status = "Inactive"
+    event_type.save()
+
+    return redirect('list_event_types')
+
 # <-------- Trash ---------->
 
 def show_trash(request):
     inactive_parishes = Parish.objects.filter(status='Inactive')
     inactive_roles = Role.objects.filter(status='Inactive')
     inactive_users = UserRegistration.objects.filter(status='Inactive')
+    inactive_event_types = EventType.objects.filter(status='Inactive')
+    
 
     context = {
         'inactive_parishes': inactive_parishes,
         'inactive_roles': inactive_roles,
         'inactive_users': inactive_users,
+        'inactive_event_types': inactive_event_types,
     }
     return render(request, 'trash.html', context)
 
