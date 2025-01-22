@@ -25,12 +25,6 @@ class Parish(models.Model):
         return self.parish_name
 
 
-class EventType(models.Model):
-    name = models.CharField(max_length=100)
-    duration = models.CharField(max_length=50)
-    def __str__(self):
-        return self.name
-
 
 class UserRegistration(models.Model):
     username = models.CharField(max_length=100)
@@ -43,6 +37,15 @@ class UserRegistration(models.Model):
 
     def __str__(self):
         return f"{self.username} - {self.parish}"
+
+
+class EventType(models.Model):
+    event_type = models.CharField(max_length=100)
+    duration = models.DurationField()
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='Active')
+    
+    def __str__(self):
+        return self.event_type
 
 
 class Event(models.Model):
