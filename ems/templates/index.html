@@ -65,7 +65,22 @@
                                         <a class="sidebar-link" href="{% url 'trash' %}">
                                             <iconify-icon icon="mdi:trash-can" class="me-2"></iconify-icon> Trash
                                         </a>
-                                    </li>                                    
+                                    </li>  
+                                    <li class="sidebar-item" style="display: none;">
+                                        <a class="sidebar-link" href="{% url 'add_parish_details' %}"></a>
+                                        <a class="sidebar-link" href="{% url 'add_role_details' %}"></a>
+                                        <a class="sidebar-link" href="{% url 'add_user_details' %}"></a>
+                                        <a class="sidebar-link" href="{% url 'add_event_details' %}"></a>
+                                        <a class="sidebar-link" href="{% url 'add_event_type_details' %}"></a>
+
+                                        <a class="sidebar-link" href="{% url 'list_parishes' %}"></a>
+                                        <a class="sidebar-link" href="{% url 'list_roles' %}"></a>
+                                        <a class="sidebar-link" href="{% url 'list_users' %}"></a>
+                                        <a class="sidebar-link" href="{% url 'list_events' %}"></a>
+                                        <a class="sidebar-link" href="{% url 'list_event_types' %}"></a>
+                                        
+
+                                    </li>                         
                                     
                                 </ul>
                             </nav>
