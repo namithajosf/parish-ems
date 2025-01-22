@@ -20,7 +20,20 @@ def format_timedelta(duration):
 
 
 def index(request):
-    return render(request, 'index.html')
+    event_type = EventType.objects.first()
+    event = Event.objects.first()
+    parish = Parish.objects.first()
+    role = Role.objects.first()
+    user = UserRegistration.objects.first()
+
+    context = {
+        'event_type': event_type,
+        'event': event,
+        'parish': parish,
+        'role': role,
+        'user': user,
+    }
+    return render(request, 'index.html', context)
 
 def app_calendar(request):
     return render(request, 'app-calendar.html')
@@ -28,7 +41,7 @@ def app_calendar(request):
 def settings(request):
     return render(request, 'settings.html')
 
-# <---------- Add details --------->
+# <---------------------------------------------------------- Add details ---------------------------------------------------------->
 def add_role_details(request):
     if request.method == 'POST':
         form = RoleForm(request.POST)
@@ -93,7 +106,7 @@ def add_event_details(request):
     return render(request, 'add-event-details.html')
 
 
-# <--------- List details --------->
+# <---------------------------------------------------------- List details ---------------------------------------------------------->
 def list_roles(request):
     search_query = request.GET.get('q', '')
     roles = Role.objects.filter(status="Active")
@@ -172,7 +185,7 @@ def list_events(request):
     return render(request, 'list-events.html')
 
 
-# <---------- View details --------->
+# <---------------------------------------------------------- View details ------------------------------------------------------------------>
 def view_role_details(request, role_id):
     role = get_object_or_404(Role, id=role_id)
     return render(request, 'view-role-details.html', {'role': role})
@@ -192,7 +205,7 @@ def view_event_type_details(request, event_type_id):
 def view_event_details(request):
     return render(request, 'view-event-details.html')
 
-# <--------- Edit details --------->
+# <---------------------------------------------------------- Edit details ---------------------------------------------------------->
 def edit_role_details(request, pk):
     role = get_object_or_404(Role, pk=pk)
 
@@ -268,7 +281,7 @@ def edit_event_details(request):
     return render(request, 'edit-event-details.html')
 
 
-# <-------- Delete details ---------->
+# <---------------------------------------------------------- Delete details ---------------------------------------------------------->
 def delete_parish_details(request, parish_id):
     parish = get_object_or_404(Parish, id=parish_id)
 
@@ -301,7 +314,7 @@ def delete_event_type_details(request, event_type_id):
 
     return redirect('list_event_types')
 
-# <-------- Trash ---------->
+# <---------------------------------------------------------- Trash ---------------------------------------------------------->
 
 def show_trash(request):
     inactive_parishes = Parish.objects.filter(status='Inactive')
