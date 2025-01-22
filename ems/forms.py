@@ -1,8 +1,8 @@
+from datetime import timedelta
 from django import forms
 from .models import Role, Parish, EventType, UserRegistration, Event
 from .choices import STATUS_CHOICES, EVENT_STATUS_CHOICES
 
-# Form for Role model
 class RoleForm(forms.ModelForm):
     class Meta:
         model = Role
@@ -11,7 +11,6 @@ class RoleForm(forms.ModelForm):
             'status': forms.Select(choices=STATUS_CHOICES),
         }
 
-# Form for Parish model
 class ParishForm(forms.ModelForm):
     class Meta:
         model = Parish
@@ -21,15 +20,6 @@ class ParishForm(forms.ModelForm):
         ]
         widgets = {
             'status': forms.Select(choices=STATUS_CHOICES),
-        }
-
-# Form for EventType model
-class EventTypeForm(forms.ModelForm):
-    class Meta:
-        model = EventType
-        fields = ['name', 'duration']
-        widgets = {
-            'status': forms.Select(choices=EVENT_STATUS_CHOICES),
         }
 
 class UserRegistrationForm(forms.ModelForm):
@@ -77,8 +67,6 @@ class UserRegistrationForm(forms.ModelForm):
 
         return cleaned_data
 
-
-
 class EventForm(forms.ModelForm):
     class Meta:
         model = Event
@@ -99,3 +87,17 @@ class EventForm(forms.ModelForm):
             'event_description': forms.Textarea(attrs={'rows': 4, 'cols': 40}),
             'remarks': forms.Textarea(attrs={'rows': 4, 'cols': 40}),
         }
+
+
+class EventTypeForm(forms.ModelForm):
+    class Meta:
+        model = EventType
+        fields = ['event_type', 'duration', 'status']
+        widgets = {
+            'status': forms.Select(choices=STATUS_CHOICES),
+        }
+
+        def clean_duration(self):
+            duration_str = self.cleaned_data['duration']
+            hours, minutes = map(int, duration_str.split(':'))
+            return timedelta(hours=hours, minutes=minutes)
