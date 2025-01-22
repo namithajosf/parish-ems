@@ -7,5 +7,5 @@ EVENT_STATUS_CHOICES = [
     ('Pending', 'Pending'),
     ('Scheduled', 'Scheduled'),
     ('Completed', 'Completed'),
-    ('Cancelled', 'Cancelled'),
+    ('Deleted', 'Deleted'),
 ]
