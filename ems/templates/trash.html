@@ -103,7 +103,7 @@
         </div>
     </div>
 
-    <!-- Deleted Roles Table -->
+    <!-- Deleted Role Table -->
     <div class="card w-100 position-relative overflow-hidden">
         <div class="px-4 py-3 border-bottom d-flex align-items-center">
             <h4 class="mb-0 fw-semibold">Deleted Roles</h4>
@@ -138,6 +138,45 @@
                         {% empty %}
                             <tr>
                                 <td colspan="3" class="text-center text-muted">No deleted roles found.</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Deleted Event Type Table -->
+    <div class="card w-100 position-relative overflow-hidden">
+        <div class="px-4 py-3 border-bottom d-flex align-items-center">
+            <h4 class="mb-0 fw-semibold">Deleted Event Types</h4>
+        </div>
+        <div class="card-body p-4">
+            <div class="table-responsive border rounded-1">
+                <table class="table mb-0">
+                  <thead class="table-info">
+                        <tr>
+                            <th>Event Type</th>
+                            <th>Duration</th>
+                            <th>Restore</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for event_type in inactive_event_types %}
+                            <tr>
+                                <td>{{ event_type.event_type }}</td>
+                                <td>{{ event_type.duration }}</td>
+                                <td>
+                                    <a href="{% url 'restore_object' model_name='EventType' object_id=event_type.id %}" 
+                                        class="btn d-flex justify-content-center align-items-center" 
+                                        style="width: 40px; height: 40px; border-radius: 50%; display: flex; justify-content: center; align-items: center;">
+                                        <iconify-icon icon="mdi:restore" style="font-size: 20px;"></iconify-icon>
+                                    </a>
+                                </td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="3" class="text-center text-muted">No deleted event types found.</td>
                             </tr>
                         {% endfor %}
                     </tbody>
