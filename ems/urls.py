@@ -5,7 +5,7 @@ from .views import (
     add_parish_details, list_parishes, view_parish_details, edit_parish_details, delete_parish_details,  
     add_role_details, list_roles, view_role_details, edit_role_details, delete_role_details, 
     add_event_details, list_events, view_event_details, edit_event_details,
-    add_event_type_details, list_event_types, view_event_type_details, edit_event_type_details,delete_event_type_details,
+    add_event_type_details, list_event_types, view_event_type_details, edit_event_type_details,delete_event_type_details,assign_priest
 )
 
 urlpatterns = [
@@ -18,6 +18,7 @@ urlpatterns = [
     path('add-role-details/', add_role_details, name='add_role_details'),
     path('add-event-type-details/', add_event_type_details, name='add_event_type_details'),
     path('add-event-details/', add_event_details, name='add_event_details'),
+    path('assign-priest/<int:pk>/', assign_priest, name='assign_priest'),
 
     path('list-parishes/', list_parishes, name='list_parishes'),
     path('list-users/', list_users, name='list_users'),

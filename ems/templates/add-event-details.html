@@ -41,7 +41,7 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
-                    <form method="post" action="{% url 'add-event-details' %}">
+                    <form method="post" action="{% url 'add_event_details' %}">
                         {% csrf_token %}
 
                         <div class="row">
@@ -69,8 +69,8 @@
                                     <label for="event_type" class="form-label">Event Type</label>
                                     <select id="event_type" name="event_type" class="form-select" required>
                                         <option value="" disabled selected>Select Event Type</option>
-                                        {% for type in event_types %}
-                                            <option value="{{ type.id }}">{{ type.name }}</option>
+                                        {% for event_type in event_types %}
+                                            <option value="{{ event_type.id }}">{{ event_type.event_type }}</option>
                                         {% endfor %}
                                     </select>
                                 </div>
@@ -86,18 +86,7 @@
                         </div>
                         
                         <div class="row">
-                            <!-- Select Priest -->
-                            <div class="col-md-6">
-                                <div class="form-group mb-4">
-                                    <label for="priest" class="form-label">Select Priest</label>
-                                    <select id="priest" name="priest" class="form-select" required>
-                                        <option value="" disabled selected>Select Priest</option>
-                                        {% for priest in priests %}
-                                            <option value="{{ priest.id }}">{{ priest.username }}</option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
-                            </div>
+                            
                             
                             <!-- Parish -->
                             <div class="col-md-6">

@@ -116,12 +116,49 @@ def add_event_details(request):
 
     event_types = EventType.objects.all()
     parishes = Parish.objects.all()
-    priests = UserRegistration.objects.filter(role__role='Priest')
-
     return render(request, 'add-event-details.html', {
         'form': form,
         'event_types': event_types,
         'parishes': parishes,
+    
+    })
+
+#<-----------------------------------------------------Assign Priest----------------------------------------------------------------->
+
+from django.contrib import messages
+
+def assign_priest(request, pk):
+    # Get the event or return 404 if not found
+    event = get_object_or_404(Event, id=pk)
+    
+    # Fetch all users with the 'Priest' role
+    priests = UserRegistration.objects.filter(role__role='Priest')  # Ensure role filtering is correct
+
+    if request.method == 'POST':
+        selected_priest_id = request.POST.get('priest')
+        
+        # Validate if the priest ID is valid and numeric
+        if not selected_priest_id or not selected_priest_id.isdigit():
+            messages.error(request, "Invalid priest selection. Please try again.")
+            return render(request, 'assign-priest.html', {
+                'event': event,
+                'priests': priests,
+            })
+        
+        # Fetch the selected priest or return 404 if it doesn't exist
+        selected_priest = get_object_or_404(UserRegistration, id=int(selected_priest_id), role__role='Priest')
+        
+        # Assign the priest to the event
+        event.priest = selected_priest
+        event.save()
+        
+        # Display a success message and redirect
+        messages.success(request, f"Priest '{selected_priest.username}' assigned to event '{event.event_name}' successfully.")
+        return redirect('list_events')  # Redirect after successful assignment
+
+    # Render the form with event and available priests
+    return render(request, 'assign-priest.html', {
+        'event': event,
         'priests': priests,
     })
 

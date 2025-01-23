@@ -36,7 +36,7 @@
                     <strong>Event Name:</strong> {{ event.event_name}}
                 </div>
                 <div class="col-md-6">
-                    <strong>Event Type:</strong> {{ event.event_type.name }}
+                    <strong>Event Type:</strong> {{ event.event_type }}
                 </div>
             </div>
             <div class="row mt-3">
@@ -75,6 +75,10 @@
                 </a>
                 <a href="{% url 'list_events' %}" class="btn bg-danger-subtle text-danger ms-6">
                     Back
+                </a>
+                <a href="{% url 'assign_priest' event.pk %}" class="btn btn-success ms-3">
+                    <i class="ti ti-user-check fs-5"></i>
+                    Assign Priest
                 </a>
             </div>
         </div>
