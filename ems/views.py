@@ -8,7 +8,7 @@ from .models import Parish, Role, UserRegistration, EventType, Event
 from .forms import RoleForm, ParishForm, UserRegistrationForm, EventTypeForm, EventForm
 from datetime import timedelta
 
-
+# <---------------------------------------------------------- Duration ---------------------------------------------------------->
 def format_timedelta(duration):
     if isinstance(duration, timedelta):
         total_seconds = int(duration.total_seconds())
@@ -18,7 +18,7 @@ def format_timedelta(duration):
         return f"{hours:02}:{minutes:02}:{seconds:02}"
     return str(duration)
 
-
+# <-------------------------------------------------------------------------------------------------------------------------------->
 def index(request):
     event_type = EventType.objects.first()
     event = Event.objects.first()
