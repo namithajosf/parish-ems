@@ -103,7 +103,28 @@ def add_event_type_details(request):
     return render(request, 'add-event-type-details.html', {'form': form})
 
 def add_event_details(request):
-    return render(request, 'add-event-details.html')
+    if request.method == "POST":
+        form = EventForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Event added successfully!")
+            return redirect('app_calendar')
+        else:
+            messages.error(request, "There was an error adding the event. Please try again.")
+    else:
+        form = EventForm()
+
+    event_types = EventType.objects.all()
+    parishes = Parish.objects.all()
+    priests = UserRegistration.objects.filter(role__role='Priest')
+
+    return render(request, 'add-event-details.html', {
+        'form': form,
+        'event_types': event_types,
+        'parishes': parishes,
+        'priests': priests,
+    })
+
 
 
 # <---------------------------------------------------------- List details ---------------------------------------------------------->
@@ -182,8 +203,8 @@ def list_event_types(request):
 
 
 def list_events(request):
-    return render(request, 'list-events.html')
-
+    events = Event.objects.all()
+    return render(request, 'list-events.html', {'events': events})
 
 # <---------------------------------------------------------- View details ------------------------------------------------------------------>
 def view_role_details(request, role_id):
@@ -202,8 +223,9 @@ def view_event_type_details(request, event_type_id):
     event_type = get_object_or_404(EventType, id=event_type_id)
     return render(request, 'view-event-type-details.html', {'event_type': event_type})
 
-def view_event_details(request):
-    return render(request, 'view-event-details.html')
+def view_event_details(request, event_id):
+    event = get_object_or_404(Event, id=event_id)
+    return render(request, 'view-event-details.html', {'event': event})
 
 # <---------------------------------------------------------- Edit details ---------------------------------------------------------->
 def edit_role_details(request, pk):
@@ -277,8 +299,19 @@ def edit_event_type_details(request, pk):
 
 
 
-def edit_event_details(request):
-    return render(request, 'edit-event-details.html')
+def edit_event_details(request, pk):
+    event = get_object_or_404(Event, pk=pk)
+    
+    if request.method == 'POST':
+        form = EventForm(request.POST, instance=event)
+        if form.is_valid():
+            form.save()  
+            messages.success(request, "Event details updated successfully.")
+            return redirect('edit_event_details', pk=event.pk)
+    else:
+        form = EventForm(instance=event)
+    
+    return render(request, 'edit-event-details.html', {'form': form, 'event': event})
 
 
 # <---------------------------------------------------------- Delete details ---------------------------------------------------------->

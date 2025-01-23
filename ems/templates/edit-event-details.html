@@ -1,7 +1,144 @@
 {% extends 'index.html' %}
 {% block content %}
 
-<title>{% block title %}Events{% endblock %}</title>
+<title>{% block title %}Edit Event Details{% endblock %}</title>
 
+<div class="container-fluid">
+    <div class="card card-body py-3">
+        <div class="row align-items-center">
+            <div class="col-12">
+                <div class="d-sm-flex align-items-center justify-space-between">
+                    <h4 class="mb-4 mb-sm-0 card-title">Edit Event Details</h4>
+                    <nav aria-label="breadcrumb" class="ms-auto">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item d-flex align-items-center">
+                                <a class="text-muted text-decoration-none d-flex" href="{% url 'index' %}">
+                                    <iconify-icon icon="solar:home-2-line-duotone" class="fs-6"></iconify-icon>
+                                </a>
+                            </li>
+                            <li class="breadcrumb-item" aria-current="page">
+                                <span class="badge fw-medium fs-2 bg-primary-subtle text-primary">Event</span>
+                            </li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
 
+    {% if messages %}
+        <div class="alert alert-dismissible fade show" role="alert">
+            {% for message in messages %}
+                <div class="{% if message.tags == 'success' %}alert-success{% elif message.tags == 'error' %}alert-danger{% endif %}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endif %}
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+
+                    <form method="post" action="{% url 'edit_event_details' pk=event.pk %}">
+                        {% csrf_token %}
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group mb-4">
+                                    <label for="event_name" class="form-label">Event Name</label>
+                                    <input type="text" class="form-control" id="event_name" name="event_name" value="{{ event.event_name }}" required>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group mb-4">
+                                    <label for="event_type" class="form-label">Event Type</label>
+                                    <input type="text" class="form-control" id="event_type" name="event_type" value="{{ event.event_type.name }}" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group mb-4">
+                                    <label for="parish" class="form-label">Parish</label>
+                                    <input type="text" class="form-control" id="parish" name="parish" value="{{ event.parish.parish_name }}" required>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group mb-4">
+                                    <label for="priest" class="form-label">Priest</label>
+                                    <input type="text" class="form-control" id="priest" name="priest" value="{{ event.priest }}" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group mb-4">
+                                    <label for="event_date" class="form-label">Event Date</label>
+                                    <input type="date" class="form-control" id="event_date" name="event_date" 
+                                           value="{{ event.event_date|date:'Y-m-d' }}" required>
+                                </div>
+                            </div>
+                        
+                            <div class="col-md-6">
+                                <div class="form-group mb-4">
+                                    <label for="event_time" class="form-label">Event Time</label>
+                                    <input type="time" class="form-control" id="event_time" name="event_time" 
+                                           value="{{ event.event_time|date:'H:i' }}" required>
+                                </div>
+                            </div>
+                        </div>
+                        
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group mb-4">
+                                    <label for="event_description" class="form-label">Description</label>
+                                    <textarea class="form-control" id="event_description" name="event_description" rows="4" required>{{ event.event_description }}</textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group mb-4">
+                                    <label class="form-label" for="status_select">Status</label>
+                                    <select id="status_select" name="status" class="form-select" required>
+                                        <option value="Scheduled" {% if event.status == "Scheduled" %}selected{% endif %}>Scheduled</option>
+                                        <option value="Ongoing" {% if event.status == "Ongoing" %}selected{% endif %}>Ongoing</option>
+                                        <option value="Completed" {% if event.status == "Completed" %}selected{% endif %}>Completed</option>
+                                        <option value="Cancelled" {% if event.status == "Cancelled" %}selected{% endif %}>Cancelled</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group mb-4">
+                                    <label for="remarks" class="form-label">Remarks</label>
+                                    <input type="text" class="form-control" id="remarks" name="remarks" value="{{ event.remarks }}" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-4">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="ti ti-file-upload"></i>
+                                Save
+                            </button>
+                            <a href="{% url 'view_event_details' event.id %}" class="btn bg-danger-subtle text-danger ms-6">
+                                Cancel
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

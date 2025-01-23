@@ -1,7 +1,84 @@
 {% extends 'index.html' %}
 {% block content %}
 
-<title>{% block title %}Events{% endblock %}</title>
+<title>{% block title %}Event Details{% endblock %}</title>
 
+<div class="container-fluid">
+    <div class="card card-body py-3">
+        <div class="row align-items-center">
+            <div class="col-12">
+                <div class="d-sm-flex align-items-center justify-space-between">
+                    <h4 class="mb-4 mb-sm-0 card-title">Event Details</h4>
+                    <nav aria-label="breadcrumb" class="ms-auto">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item d-flex align-items-center">
+                                <a class="text-muted text-decoration-none d-flex" href="{% url 'index' %}">
+                                    <iconify-icon icon="solar:home-2-line-duotone" class="fs-6"></iconify-icon>
+                                </a>
+                            </li>
+                            <li class="breadcrumb-item" aria-current="page">
+                                <span class="badge fw-medium fs-2 bg-primary-subtle text-primary">Event</span>
+                            </li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="card">
+        <div class="card-header text-bg-primary">
+            <h5 class="mb-0 text-white">{{ event.event_name }}</h5>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <strong>Event Name:</strong> {{ event.event_name}}
+                </div>
+                <div class="col-md-6">
+                    <strong>Event Type:</strong> {{ event.event_type.name }}
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-md-6">
+                    <strong>Parish:</strong> {{ event.parish.parish_name }}
+                </div>
+                <div class="col-md-6">
+                    <strong>Priest:</strong> {{ event.priest }}
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-md-6">
+                    <strong>Event Date:</strong> {{ event.event_date }}
+                </div>
+                <div class="col-md-6">
+                    <strong>Event Time:</strong> {{ event.event_time }}
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-md-12">
+                    <strong>Description:</strong> {{ event.event_description }}
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-md-6">
+                    <strong>Status:</strong> {{ event.status }}
+                </div>
+                <div class="col-md-6">
+                    <strong>Remarks:</strong> {{ event.remarks }}
+                </div>
+            </div>
+            <div class="mt-4">
+                <a href="{% url 'edit_event_details' pk=event.pk %}" class="btn btn-primary">
+                    <i class="ti ti-edit fs-5"></i>
+                    Edit
+                </a>
+                <a href="{% url 'list_events' %}" class="btn bg-danger-subtle text-danger ms-6">
+                    Back
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
 
 {% endblock %}
