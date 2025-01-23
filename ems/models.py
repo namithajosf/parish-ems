@@ -34,6 +34,7 @@ class UserRegistration(models.Model):
     role = models.ForeignKey(Role, on_delete=models.CASCADE)
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='Active')
     parish = models.ForeignKey(Parish, on_delete=models.CASCADE)
+    created_time = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"{self.username} - {self.parish}"
@@ -65,6 +66,7 @@ class Event(models.Model):
     )
     status = models.CharField(max_length=15, choices=EVENT_STATUS_CHOICES, default='Scheduled')
     remarks = models.TextField(null=True, blank=True)
+    created_time = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.event_name

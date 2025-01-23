@@ -56,6 +56,11 @@
                     <strong>Status:</strong> {{ user.status }}
                 </div>
             </div>
+            <div class="row mt-3">
+                <div class="col-md-6">
+                    <strong>Created Time:</strong> {{ user.created_time }} 
+                </div>
+            </div>
 
             <div class="mt-4">
                 <a href="{% url 'edit_user_details' pk=user.pk %}" class="btn btn-primary">
