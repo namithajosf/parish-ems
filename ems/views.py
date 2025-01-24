@@ -103,8 +103,27 @@ def add_event_type_details(request):
     return render(request, 'add-event-type-details.html', {'form': form})
 
 def add_event_details(request):
-    return render(request, 'add-event-details.html')
+    if request.method == "POST":
+        form = EventForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Event added successfully!")
+            return redirect('app_calendar')
+        else:
+            messages.error(request, "There was an error adding the event. Please try again.")
+    else:
+        form = EventForm()
 
+    event_types = EventType.objects.all()
+    parishes = Parish.objects.all()
+    priests = UserRegistration.objects.filter(role__role='Priest')
+
+    return render(request, 'add-event-details.html', {
+        'form': form,
+        'event_types': event_types,
+        'parishes': parishes,
+        'priests': priests,
+    })
 
 # <---------------------------------------------------------- List details ---------------------------------------------------------->
 def list_roles(request):
