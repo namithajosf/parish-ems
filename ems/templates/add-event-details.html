@@ -1,7 +1,170 @@
 {% extends 'index.html' %}
 {% block content %}
 
-<title>{% block title %}Add Events{% endblock %}</title>
+<title>{% block title %}Add Event{% endblock %}</title>
 
+<div class="container-fluid">
+    <div class="card card-body py-3">
+        <div class="row align-items-center">
+            <div class="col-12">
+                <div class="d-sm-flex align-items-center justify-space-between">
+                    <h4 class="mb-4 mb-sm-0 card-title">Add Event</h4>
+                    <nav aria-label="breadcrumb" class="ms-auto">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item d-flex align-items-center">
+                                <a class="text-muted text-decoration-none d-flex" href="{% url 'index' %}">
+                                    <iconify-icon icon="solar:home-2-line-duotone" class="fs-6"></iconify-icon>
+                                </a>
+                            </li>
+                            <li class="breadcrumb-item" aria-current="page">
+                                <span class="badge fw-medium fs-2 bg-primary-subtle text-primary">Event</span>
+                            </li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    {% if messages %}
+        <div class="alert alert-dismissible fade show" role="alert">
+            {% for message in messages %}
+                <div class="{% if message.tags == 'success' %}alert-success{% elif message.tags == 'error' %}alert-danger{% endif %}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endif %}
+    
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <form method="post" action="{% url 'add-event-details' %}">
+                        {% csrf_token %}
+
+                        <div class="row">
+                            <!-- Event Name -->
+                            <div class="col-md-6">
+                                <div class="form-group mb-4">
+                                    <label for="event_name" class="form-label">Event Name</label>
+                                    <input type="text" class="form-control" id="event_name" name="event_name" required>
+                                </div>
+                            </div>
+
+                            <!-- Event Date -->
+                            <div class="col-md-6">
+                                <div class="form-group mb-4">
+                                    <label for="event_date" class="form-label">Event Date</label>
+                                    <input type="date" class="form-control" id="event_date" name="event_date" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <!-- Event Type -->
+                            <div class="col-md-6">
+                                <div class="form-group mb-4">
+                                    <label for="event_type" class="form-label">Event Type</label>
+                                    <select id="event_type" name="event_type" class="form-select" required>
+                                        <option value="" disabled selected>Select Event Type</option>
+                                        {% for type in event_types %}
+                                            <option value="{{ type.id }}">{{ type.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Description -->
+                            <div class="col-md-6">
+                                <div class="form-group mb-4">
+                                    <label for="event_description" class="form-label">Description</label>
+                                    <textarea id="event_description" name="event_description" class="form-control" rows="3" required></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <!-- Select Priest -->
+                            <div class="col-md-6">
+                                <div class="form-group mb-4">
+                                    <label for="priest" class="form-label">Select Priest</label>
+                                    <select id="priest" name="priest" class="form-select" required>
+                                        <option value="" disabled selected>Select Priest</option>
+                                        {% for priest in priests %}
+                                            <option value="{{ priest.id }}">{{ priest.username }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <!-- Parish -->
+                            <div class="col-md-6">
+                                <div class="form-group mb-4">
+                                    <label for="parish" class="form-label">Parish</label>
+                                    <select id="parish" name="parish" class="form-select" required>
+                                        <option value="" disabled selected>Select Parish</option>
+                                        {% for parish in parishes %}
+                                            <option value="{{ parish.id }}">{{ parish.parish_name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <!-- Event Time -->
+                            <div class="col-md-6">
+                                <div class="form-group mb-4">
+                                    <label for="event_time" class="form-label">Event Time</label>
+                                    <input type="time" class="form-control" id="event_time" name="event_time" required>
+                                </div>
+                            </div>
+                            
+                            <!-- Status -->
+                            <div class="col-md-6">
+                                <div class="form-group mb-4">
+                                    <label for="status" class="form-label">Status</label>
+                                    <select id="status" name="status" class="form-select" required>
+                                        <option value="Scheduled" selected>Scheduled</option>
+                                        <option value="Ongoing">Ongoing</option>
+                                        <option value="Completed">Completed</option>
+                                        <option value="Cancelled">Cancelled</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <!-- Remarks -->
+                            <div class="col-md-12">
+                                <div class="form-group mb-4">
+                                    <label for="remarks" class="form-label">Remarks</label>
+                                    <textarea id="remarks" name="remarks" class="form-control" rows="3"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <!-- Submit Button -->
+                            <div class="col-12">
+                                <div class="d-md-flex align-items-center">
+                                    <div class="ms-auto mt-3 mt-md-0">
+                                        <button type="submit" class="btn btn-primary hstack gap-6">
+                                            <i class="ti ti-file-upload"></i>
+                                            Save
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 {% endblock %}
