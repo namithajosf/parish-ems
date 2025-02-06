@@ -32,6 +32,15 @@
             <h5 class="mb-0 text-white">Event: {{ event.event_name }}</h5>
         </div>
         <div class="card-body">
+            <!-- Display messages from view -->
+            {% if messages %}
+                <div class="alert alert-info">
+                    {% for message in messages %}
+                        <p>{{ message }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+            
             <form method="POST">
                 {% csrf_token %}
                 <div class="mb-3">
