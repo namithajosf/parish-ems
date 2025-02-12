@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>You Have Been Assigned to an Event</title>
+</head>
+<body style="font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: #f4f4f4;">
+    <div style="background-color: #FFD966; padding: 20px; border-radius: 5px; max-width: 600px; margin: 20px auto;">
+
+        <h2 style="color: #1A237E;">Event Assignment Notification</h2>
+
+        <p style="color: #333333;">Dear <strong>{{ priest.username }}</strong>,</p>
+
+        <p style="color: #333333;">
+            You have been successfully assigned to the event <strong>{{ event.event_name }}</strong>.
+        </p>
+
+        <p style="color: #333333;"><strong>Event Details:</strong></p>
+        <ul style="color: #333333; padding-left: 20px;">
+            <li><strong>Event Name:</strong> {{ event.event_name }}</li>
+            <li><strong>Date:</strong> {{ event.event_date }}</li>
+            <li><strong>Time:</strong> {{ event.event_time }}</li>
+            <li><strong>Parish:</strong> {{ event.parish }}</li>
+            <li><strong>Description:</strong> {{ event.event_description|default:"No description provided." }}</li>
+        </ul>
+
+        <p style="color: #333333;">
+            Please mark this in your schedule and let us know if you need any further details.
+        </p>
+
+        <p style="color: #333333;"><strong>Best regards,</strong><br>Your Church Management System</p>
+
+    </div>
+</body>
+</html>

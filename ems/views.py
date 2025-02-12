@@ -5,6 +5,7 @@ from django.contrib import messages
 from django.db.models import Q
 from django.contrib.auth.hashers import make_password
 from django.core.mail import send_mail
+from django.template.loader import render_to_string
 from django.conf import settings
 from django.core.paginator import Paginator
 from .models import Parish, Role, UserRegistration, EventType, Event
@@ -161,44 +162,36 @@ def assign_priest(request, pk):
         priest_email = selected_priest.email
 
         sender_email = 'aleenabenykk24@gmail.com'
-        # Prepare the email subject and message for the parish
+        
+        # Prepare the email subject for both parish and priest
         subject_parish = f"Priest Assigned to Event: {event.event_name}"
-        message_parish = f"The priest {selected_priest.username} has been successfully assigned to the event {event.event_name}."
-
-        # Prepare the email subject and message for the priest (with event details)
         subject_priest = f"You have been assigned to the event: {event.event_name}"
-        message_priest = f"""
-        Dear {selected_priest.username},
 
-        You have been successfully assigned to the event {event.event_name}.
+        # Render email templates
+        message_parish = render_to_string('emails/parish_email_template.html', {
+            'event': event,
+            'priest': selected_priest,
+        })
 
-        Event Details:
-        - Event Name: {event.event_name}
-        - Date: {event.event_date}
-        - Time: {event.event_time}
-        - Parish: {event.parish}
-        - Description: {event.event_description if event.event_description else 'No description provided.'}
-
-        Please mark this in your schedule and let us know if you need any further details.
-
-        Best regards,
-        Your Church Management System
-        """
+        message_priest = render_to_string('emails/priest_email_template.html', {
+            'event': event,
+            'priest': selected_priest,
+        })
 
         # Send email to the parish and priest
         try:
             if parish_email:
-                send_mail(subject_parish, message_parish, sender_email, [parish_email])
+                send_mail(subject_parish, '', sender_email, [parish_email], html_message=message_parish)
 
             if priest_email:
-                send_mail(subject_priest, message_priest, sender_email, [priest_email])
+                send_mail(subject_priest, '', sender_email, [priest_email], html_message=message_priest)
 
             messages.success(request, f"Priest '{selected_priest.username}' assigned successfully. Emails sent to the parish and the priest.")
         except Exception as e:
             messages.error(request, f"Priest assigned, but there was an error sending the email: {str(e)}")
 
         # Redirect to list_events after assigning priest and sending emails
-        return redirect('list_events')  # You can also keep it the same page or another page if you prefer
+        return redirect('list_events')
 
     # Render the form with event and available priests
     return render(request, 'assign-priest.html', {
