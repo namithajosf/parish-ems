@@ -11,6 +11,7 @@ from django.core.paginator import Paginator
 from .models import Parish, Role, UserRegistration, EventType, Event
 from .forms import RoleForm, ParishForm, UserRegistrationForm, EventTypeForm, EventForm
 from datetime import timedelta
+from django.core.exceptions import FieldError
 
 
 def format_timedelta(duration):
@@ -276,15 +277,23 @@ def list_event_types(request):
 
 def list_events(request):
     search_query = request.GET.get('q', '')
-    events = Event.objects.exclude(status="Deleted") 
+    events = Event.objects.exclude(status="Deleted")  # Exclude soft-deleted events
 
     if search_query:
         events = events.filter(
-            Q(event_name__icontains=search_query) | 
-            Q(event_type__icontains=search_query)
+            Q(event_name__icontains=search_query) |  # Search by event name
+            Q(event_description__icontains=search_query) |  # Search in event description
+            Q(event_type__event_type__icontains=search_query) |  # Search by event type (ForeignKey)
+            Q(parish__parish_name__icontains=search_query)  # Search by parish name (ForeignKey)
         )
 
-    paginator = Paginator(events, 10)  # 10 events per page
+        # Check if the Priest model has a valid name field
+        try:
+            events = events.filter(Q(priest__priest_name__icontains=search_query))  # Change field if needed
+        except FieldError:
+            pass  # Ignore if the field does not exist
+
+    paginator = Paginator(events, 10)  # Paginate with 10 events per page
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
@@ -292,6 +301,9 @@ def list_events(request):
         "page_obj": page_obj,
         "search_query": search_query,
     })
+
+
+
 
 
 # <---------------------------------------------------------- View details ------------------------------------------------------------------>
