@@ -4,7 +4,7 @@ from .views import (
     add_user_details, list_users, view_user_details, edit_user_details, delete_user_details, 
     add_parish_details, list_parishes, view_parish_details, edit_parish_details, delete_parish_details,  
     add_role_details, list_roles, view_role_details, edit_role_details, delete_role_details, 
-    add_event_details, list_events, view_event_details, edit_event_details,
+    add_event_details, list_events, view_event_details, edit_event_details, delete_event_details,
     add_event_type_details, list_event_types, view_event_type_details, edit_event_type_details,delete_event_type_details,assign_priest
 
 )
@@ -46,6 +46,7 @@ urlpatterns = [
     path('delete-user-details/<int:user_id>/', delete_user_details, name='delete_user_details'),
     path('delete-role-details/<int:role_id>/', delete_role_details, name='delete_role_details'),
     path('delete-event-type-details/<int:event_type_id>/', delete_event_type_details, name='delete_event_type_details'),
+    path('delete-event-details/<int:event_id>/', delete_event_details, name='delete_event_details'),
 
 
     path('trash/', show_trash, name='trash'),

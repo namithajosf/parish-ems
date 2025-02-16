@@ -275,8 +275,24 @@ def list_event_types(request):
 
 
 def list_events(request):
-    events = Event.objects.all()
-    return render(request, 'list-events.html', {'events': events})
+    search_query = request.GET.get('q', '')
+    events = Event.objects.exclude(status="Deleted") 
+
+    if search_query:
+        events = events.filter(
+            Q(event_name__icontains=search_query) | 
+            Q(event_type__icontains=search_query)
+        )
+
+    paginator = Paginator(events, 10)  # 10 events per page
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    return render(request, "list-events.html", {
+        "page_obj": page_obj,
+        "search_query": search_query,
+    })
+
 
 # <---------------------------------------------------------- View details ------------------------------------------------------------------>
 def view_role_details(request, role_id):
@@ -419,6 +435,14 @@ def delete_event_type_details(request, event_type_id):
 
     return redirect('list_event_types')
 
+def delete_event_details(request, event_id):
+    event = get_object_or_404(Event, id=event_id)
+    
+    event.status = "Deleted"  # Mark as deleted
+    event.save()
+    
+    messages.success(request, "Event moved to trash.")
+    return redirect('list_events')
 # <---------------------------------------------------------- Trash ---------------------------------------------------------->
 
 def show_trash(request):
@@ -426,6 +450,7 @@ def show_trash(request):
     inactive_roles = Role.objects.filter(status='Inactive')
     inactive_users = UserRegistration.objects.filter(status='Inactive')
     inactive_event_types = EventType.objects.filter(status='Inactive')
+    deleted_events = Event.objects.filter(status="Deleted")
     
 
     context = {
@@ -433,17 +458,22 @@ def show_trash(request):
         'inactive_roles': inactive_roles,
         'inactive_users': inactive_users,
         'inactive_event_types': inactive_event_types,
+        'deleted_events': deleted_events,
     }
     return render(request, 'trash.html', context)
 
 def restore_object(request, model_name, object_id):
-    model = apps.get_model('ems', model_name) 
-    
+    model = apps.get_model('ems', model_name)  
     obj = get_object_or_404(model, id=object_id)
-    
+
     if hasattr(obj, 'status'):
-        obj.status = 'Active'
+        if model_name == "Event":
+            obj.status = "Scheduled"  # Restore events to "Scheduled" status
+        else:
+            obj.status = 'Active'  # Restore other models to "Active"
+        
         obj.save()
     
     messages.success(request, f"{model_name} restored successfully.")
     return redirect('trash')
+
