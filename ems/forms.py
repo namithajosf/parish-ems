@@ -68,25 +68,28 @@ class UserRegistrationForm(forms.ModelForm):
         return cleaned_data
 
 class EventForm(forms.ModelForm):
+    event_date = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}))
+    event_time = forms.TimeField(widget=forms.TimeInput(attrs={'type': 'time'}))
+    
     class Meta:
         model = Event
-        fields = [
-            'event_name',
-            'event_type',
-            'event_date',
-            'event_time',
-            'event_description',
-            'parish',
-            'priest',
-            'status',
-            'remarks',
-        ]
+        fields = ['event_name', 'event_type', 'event_date', 'event_time', 'parish', 'priest', 'status', 'remarks', 'event_description']
         widgets = {
-            'event_date': forms.DateInput(attrs={'type': 'date'}),
-            'event_time': forms.TimeInput(attrs={'type': 'time'}),
-            'event_description': forms.Textarea(attrs={'rows': 4, 'cols': 40}),
-            'remarks': forms.Textarea(attrs={'rows': 4, 'cols': 40}),
+            'event_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'event_type': forms.Select(attrs={'class': 'form-select'}),
+            'parish': forms.Select(attrs={'class': 'form-select'}),
+            'priest': forms.Select(attrs={'class': 'form-select'}),
+            'status': forms.Select(attrs={'class': 'form-select'}),
+            'remarks': forms.Textarea(attrs={'class': 'form-control', 'rows': 2}),
+            'event_description': forms.Textarea(attrs={'class': 'form-control', 'rows': 4}),
         }
+    
+    def __init__(self, *args, **kwargs):
+        super(EventForm, self).__init__(*args, **kwargs)
+        self.fields['event_type'].queryset = EventType.objects.all()
+        self.fields['parish'].queryset = Parish.objects.all()
+        self.fields['priest'].queryset = UserRegistration.objects.filter(role__role='Priest')
+
 
 
 class EventTypeForm(forms.ModelForm):

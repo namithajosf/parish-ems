@@ -51,7 +51,7 @@ class EventType(models.Model):
 
 class Event(models.Model):
     event_name = models.CharField(max_length=255)
-    event_type = models.CharField(max_length=255)
+    event_type = models.ForeignKey(EventType, on_delete=models.CASCADE)
     event_date = models.DateField()
     event_time = models.TimeField()
     event_description = models.TextField(null=True, blank=True)

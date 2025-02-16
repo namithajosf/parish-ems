@@ -1,14 +1,14 @@
 {% extends 'index.html' %}
 {% block content %}
 
-<title>{% block title %}Edit Event Details{% endblock %}</title>
+<title>{% block title %}Edit Event{% endblock %}</title>
 
 <div class="container-fluid">
     <div class="card card-body py-3">
         <div class="row align-items-center">
             <div class="col-12">
                 <div class="d-sm-flex align-items-center justify-space-between">
-                    <h4 class="mb-4 mb-sm-0 card-title">Edit Event Details</h4>
+                    <h4 class="mb-4 mb-sm-0 card-title">Edit Event</h4>
                     <nav aria-label="breadcrumb" class="ms-auto">
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item d-flex align-items-center">
@@ -25,27 +25,32 @@
             </div>
         </div>
     </div>
-
+    
     {% if messages %}
-        <div class="alert alert-dismissible fade show" role="alert">
+        <div class="alert alert-success" role="alert" id="message-alert">
             {% for message in messages %}
-                <div class="{% if message.tags == 'success' %}alert-success{% elif message.tags == 'error' %}alert-danger{% endif %}">
-                    {{ message }}
-                </div>
+                <p>{{ message }}</p>
             {% endfor %}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
-    {% endif %}
 
+        <script>
+            window.onload = function() {
+                setTimeout(function() {
+                    document.getElementById('message-alert').style.display = 'none';
+                }, 3000);
+            }
+        </script>
+    {% endif %}
+    
     <div class="row">
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
-
                     <form method="post" action="{% url 'edit_event_details' pk=event.pk %}">
                         {% csrf_token %}
 
                         <div class="row">
+                            <!-- Event Name -->
                             <div class="col-md-6">
                                 <div class="form-group mb-4">
                                     <label for="event_name" class="form-label">Event Name</label>
@@ -53,75 +58,97 @@
                                 </div>
                             </div>
 
+                            <!-- Event Type -->
                             <div class="col-md-6">
                                 <div class="form-group mb-4">
-                                    <label for="event_type" class="form-label">Event Type</label>
-                                    <input type="text" class="form-control" id="event_type" name="event_type" value="{{ event.event_type.name }}" required>
+                                    <label class="form-label" for="event_type">Event Type</label>
+                                    <select id="event_type" name="event_type" class="form-select" required>
+                                        <option value="{{ event.event_type.id }}" selected>{{ event.event_type.event_type }}</option>
+                                        {% for event_type in event_types %}
+                                            <option value="{{ event_type.id }}">{{ event_type.event_type }}</option>
+                                        {% endfor %}
+                                    </select>
                                 </div>
                             </div>
                         </div>
 
                         <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group mb-4">
-                                    <label for="parish" class="form-label">Parish</label>
-                                    <input type="text" class="form-control" id="parish" name="parish" value="{{ event.parish.parish_name }}" required>
-                                </div>
-                            </div>
-
-                            <div class="col-md-6">
-                                <div class="form-group mb-4">
-                                    <label for="priest" class="form-label">Priest</label>
-                                    <input type="text" class="form-control" id="priest" name="priest" value="{{ event.priest }}" required>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="row">
+                            <!-- Event Date -->
                             <div class="col-md-6">
                                 <div class="form-group mb-4">
                                     <label for="event_date" class="form-label">Event Date</label>
-                                    <input type="date" class="form-control" id="event_date" name="event_date" 
-                                           value="{{ event.event_date|date:'Y-m-d' }}" required>
+                                    <input type="date" class="form-control" id="event_date" name="event_date" value="{{ event.event_date|date:'Y-m-d' }}" required>
                                 </div>
                             </div>
-                        
+
+                            <!-- Event Time -->
                             <div class="col-md-6">
                                 <div class="form-group mb-4">
                                     <label for="event_time" class="form-label">Event Time</label>
-                                    <input type="time" class="form-control" id="event_time" name="event_time" 
-                                           value="{{ event.event_time|date:'H:i' }}" required>
-                                </div>
-                            </div>
-                        </div>
-                        
-
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="form-group mb-4">
-                                    <label for="event_description" class="form-label">Description</label>
-                                    <textarea class="form-control" id="event_description" name="event_description" rows="4" required>{{ event.event_description }}</textarea>
+                                    <input type="time" class="form-control" id="event_time" name="event_time" value="{{ event.event_time|time:'H:i' }}" required>
                                 </div>
                             </div>
                         </div>
 
                         <div class="row">
+                            <!-- Parish -->
                             <div class="col-md-6">
                                 <div class="form-group mb-4">
-                                    <label class="form-label" for="status_select">Status</label>
-                                    <select id="status_select" name="status" class="form-select" required>
-                                        <option value="Scheduled" {% if event.status == "Scheduled" %}selected{% endif %}>Scheduled</option>
-                                        <option value="Ongoing" {% if event.status == "Ongoing" %}selected{% endif %}>Ongoing</option>
-                                        <option value="Completed" {% if event.status == "Completed" %}selected{% endif %}>Completed</option>
-                                        <option value="Cancelled" {% if event.status == "Cancelled" %}selected{% endif %}>Cancelled</option>
+                                    <label class="form-label" for="parish">Parish</label>
+                                    <select id="parish" name="parish" class="form-select" required>
+                                        <option value="{{ event.parish.id }}" selected>{{ event.parish.parish_name }}</option>
+                                        {% for parish in parishes %}
+                                            <option value="{{ parish.id }}">{{ parish.parish_name }}</option>
+                                        {% endfor %}
                                     </select>
                                 </div>
                             </div>
 
+                            <!-- Priest -->
+                            <div class="col-md-6">
+                                <div class="form-group mb-4">
+                                    <label class="form-label" for="priest">Priest</label>
+                                    <select id="priest" name="priest" class="form-select">
+                                        <option value="{{ event.priest.id }}" selected>
+                                            {% if event.priest %} {{ event.priest.username }} {% else %}Select Priest{% endif %}
+                                        </option>
+                                        {% for priest in priests %}
+                                            <option value="{{ priest.id }}">{{ priest.username }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <!-- Status -->
+                            <div class="col-md-6">
+                                <div class="form-group mb-4">
+                                    <label class="form-label" for="status">Status</label>
+                                    <select id="status" name="status" class="form-select" required>
+                                        <option value="{{ event.status }}" selected>{{ event.status }}</option>
+                                        {% for choice in EVENT_STATUS_CHOICES %}
+                                            <option value="{{ choice.0 }}">{{ choice.1 }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Remarks -->
                             <div class="col-md-6">
                                 <div class="form-group mb-4">
                                     <label for="remarks" class="form-label">Remarks</label>
-                                    <input type="text" class="form-control" id="remarks" name="remarks" value="{{ event.remarks }}" required>
+                                    <textarea class="form-control" id="remarks" name="remarks" rows="2">{{ event.remarks }}</textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <!-- Event Description -->
+                            <div class="col-12">
+                                <div class="form-group mb-4">
+                                    <label for="event_description" class="form-label">Event Description</label>
+                                    <textarea class="form-control" id="event_description" name="event_description" rows="4">{{ event.event_description }}</textarea>
                                 </div>
                             </div>
                         </div>
@@ -131,7 +158,7 @@
                                 <i class="ti ti-file-upload"></i>
                                 Save
                             </button>
-                            <a href="{% url 'view_event_details' event.id %}" class="btn bg-danger-subtle text-danger ms-6">
+                            <a href="{% url 'view_event_details' event.pk %}" class="btn bg-danger-subtle text-danger ms-6">
                                 Cancel
                             </a>
                         </div>
@@ -141,4 +168,5 @@
         </div>
     </div>
 </div>
+
 {% endblock %}

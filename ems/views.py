@@ -373,19 +373,19 @@ def edit_event_type_details(request, pk):
 
 def edit_event_details(request, pk):
     event = get_object_or_404(Event, pk=pk)
-    
-    if request.method == 'POST':
+
+    if request.method == "POST":
         form = EventForm(request.POST, instance=event)
         if form.is_valid():
-            form.save()  
-            messages.success(request, "Event details updated successfully.")
-            return redirect('edit_event_details', pk=event.pk)
+            form.save()
+            messages.success(request, "Event details updated successfully!")
+            return redirect('list_events')  # Redirect to event details page
+        else:
+            messages.error(request, "Error updating event. Please check the form.")
     else:
         form = EventForm(instance=event)
-    
+
     return render(request, 'edit-event-details.html', {'form': form, 'event': event})
-
-
 # <---------------------------------------------------------- Delete details ---------------------------------------------------------->
 def delete_parish_details(request, parish_id):
     parish = get_object_or_404(Parish, id=parish_id)
