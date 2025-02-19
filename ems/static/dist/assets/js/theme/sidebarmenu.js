@@ -165,8 +165,8 @@ var currentURL =
 
 var link = document.getElementById("get-url");
 
-if (currentURL.includes("/main/index.html")) {
-  link.setAttribute("href", "../main/index.html");
+if (currentURL.includes("/templates/index.html")) {
+  link.setAttribute("href", "../templates/index.html");
 } else if (currentURL.includes("/index.html")) {
   link.setAttribute("href", "./index.html");
 } else {
